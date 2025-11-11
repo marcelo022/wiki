@@ -75,10 +75,17 @@ header .logo {
     display: flex;
     justify-content: center;
 }
-.imganes{
+.imagens{
     display: flex;
     justify-content: space-around;
 }
 .img1, .img2{
     width: 400px;
+    height: 600px;
+    border: firebrick 1px solid; 
+    transition: transform 0.3s ease;
 }
+.img1:hover, .img2:hover{
+    transform: translateY(-10px);
+}
+
