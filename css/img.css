@@ -1,0 +1,88 @@
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    margin: 0;
+    background: #FFFDF2;
+    color: #000000;
+}
+
+/* =============================
+   Cabeçalho
+============================= */
+header {
+    background-color: #111;
+    color: #fff;
+    text-align: center;
+    padding: 1rem 0;
+    position: static;
+    top: 0;
+    display: flex;
+    gap: 15px;
+}
+
+.header-text{
+    width: 78%;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: end;
+}
+
+
+header .logo {
+    width: 90px;
+    border-radius: 100%;
+}
+
+footer {
+    background: #000;
+    color: #fff;
+    text-align: center;
+    padding: 15px;
+    font-size: 14px;
+    margin-top: 50px;
+}
+
+.link{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 20%;
+    
+}
+.link a{
+    background: rgb(255, 255, 255);
+    color: #000000;
+    padding: 7.5px 20px;
+    border: none;
+    border-radius: 24px;
+    font-size: 1rem;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.link a:hover {
+    color: #ff0000;
+}
+
+header .logo {
+    width: 90px;
+    border-radius: 100%;
+}
+.campeonatos{
+    border: aqua 1px solid;
+    ;
+}
+.campeonatos text{
+    display: flex;
+    justify-content: center;
+    border: red 1px solid;
+    
+    
+}
+.imganes{
+    display: flex;
+    justify-content: space-around;
+}
+.img1, .img2{
+    width: 400px;
+}
