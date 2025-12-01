@@ -4,34 +4,52 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Fotos — Associação Barra Sport Karatê</title>
+  <link rel="icon" type="image/png" href="img/karate-modified.png">
   <link rel="stylesheet" href="css/img.css">
 </head>
 <body>
+
   <!-- =============================
-       CABEÇALHO
+       CABEÇALHO DO SITE
+       Contém logo, título e menu
   ============================== -->
-  <header class="header">
+  <header class="header" id="log">
     <div class="header-text">
+
+      <!-- Logo principal da associação -->
       <img src="img/karate.png" alt="Logo da Associação Barra Sport Karatê" class="logo">
+
+      <!-- Nome da associação -->
       <h1>Associação Barra Sport Karatê</h1>
+
+      <!-- Pequena frase/descrição -->
       <p>A harmonia entre mente, técnica e movimento</p>
     </div>
 
+    <!-- Menu de links de navegação -->
     <div class="link">
       <a href="index.html">Home</a>
       <a href="imagens.html" class="active">Fotos</a>
-      <a href="historia.html">História</a>
+      <a href="#camp">campeonato</a>
+      <a href="#troca de faixa">troca de faixa</a>
+      <a href="#dojo">Dojo</a>
     </div>
   </header>
 
   <!-- =============================
        SEÇÃO 1 — CAMPEONATOS
+       Fotos de campeonatos e treinos
   ============================== -->
-  <main class="content">
+  <main class="content" id="camp">
     <section class="campeonatos">
+
+      <!-- Título da seção -->
       <h1>A Associação Barra Sport Karatê vai para campeonatos</h1>
 
+      <!-- Contêiner com todas as imagens -->
       <div class="imagens">
+
+        <!-- Cada foto é organizada dentro de <figure> -->
         <figure>
           <img src="img/WhatsApp Image 2025-11-11 at 14.27.47.jpeg" alt="Equipe no campeonato regional">
           <figcaption>Equipe no Campeonato Regional 2025</figcaption>
@@ -66,11 +84,14 @@
 
     <!-- =============================
          SEÇÃO 2 — TROCA DE FAIXA
+         Fotos do evento anual
     ============================== -->
-    <section class="campeonatos">
-      <h1>Momentos da troca de faixa</h1>
+    <!-- Obs: espaço no ID pode causar erro, mas deixei como você colocou -->
+    <section class="troca de faixa" id="troca de faixa">
+      <h1 class="campeonatos">Momentos da troca de faixa</h1>
 
       <div class="imagens">
+
         <figure>
           <img src="img/alunos2.jpeg" alt="Treino em grupo">
           <figcaption>2024 troca de faixa</figcaption>
@@ -90,39 +111,48 @@
           <img src="img/luta.jpeg" alt="Sensei e alunos">
           <figcaption>Luta na troca de faixa</figcaption>
         </figure>
+
       </div>
     </section>
 
     <!-- =============================
-         SEÇÃO 3 — O DOJO
+         SEÇÃO 3 — DOJO
+         Fotos do local de treino
     ============================== -->
-    <section class="dojo">
+    <section class="dojo" id="dojo">
+
+      <!-- Título da seção -->
       <h1>Nosso Dojo — O Local de Treino</h1>
 
+      <!-- Contêiner das imagens do dojo -->
       <div class="imagens-dojo">
+
         <figure>
-          <img src="img/dojo1.jpeg" alt="Dojo principal da Associação Barra Sport Karatê">
-          <figcaption>Dojo principal da Associação</figcaption>
+          <img src="img/IMG-20251201-WA0000.jpg" alt="Turma posicionada para foto">
+          <figcaption>Turma posicionada para foto</figcaption>
         </figure>
 
         <figure>
-          <img src="img/dojo2.jpeg" alt="Treino de alunos no Dojo">
+          <img src="img/IMG-20251201-WA0018.jpg" alt="Treino de alunos no Dojo">
           <figcaption>Treino dos alunos</figcaption>
         </figure>
 
         <figure>
-          <img src="img/dojo3.jpeg" alt="Sensei orientando os alunos no Dojo">
-          <figcaption>Sensei orientando os alunos</figcaption>
+          <img src="img/IMG-20251201-WA0015.jpg" alt="Turma reunida para o treino">
+          <figcaption>Turma reunida para o treino</figcaption>
         </figure>
+
       </div>
     </section>
   </main>
 
   <!-- =============================
-       RODAPÉ
+       RODAPÉ DO SITE
+       Informações finais
   ============================== -->
   <footer>
     <p>© 2025 Associação Barra Sport Karatê — Site desenvolvido por Marcelo Campos.</p>
   </footer>
+
 </body>
 </html>

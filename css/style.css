@@ -1,138 +1,150 @@
 /* =============================
    ESTILOS GERAIS
+   - Importo a fonte Poppins
+   - Defino estilos básicos do body
 ============================= */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
 
 body {
-    font-family: 'Poppins', Arial, Helvetica, sans-serif;
-    margin: 0;
-    background: #fffdf5;
-    color: #111;
-    line-height: 1.6;
+    font-family: 'Poppins', Arial, Helvetica, sans-serif;  /* fonte moderna */
+    margin: 0;                                             /* tira margens padrão */
+    background: #fffdf5;                                   /* cor de fundo */
+    color: #111;                                           /* cor do texto */
+    line-height: 1.6;                                      /* melhora leitura */
 }
 
-/* =============================
-   CABEÇALHO
-============================= */
 /* =============================
    CABEÇALHO UNIFICADO E APRIMORADO
+   - Fundo escuro
+   - Fixo no topo ao rolar
+   - Animação de entrada
 ============================= */
 header {
-    background-color: #111;                 /* fundo escuro */
-    color: #fff;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+    background-color: #111;        /* fundo preto */
+    color: #fff;                   /* texto branco */
+    display: flex;                 /* organiza em linha */
+    align-items: center;           /* centraliza verticalmente */
+    justify-content: space-between;/* separa logo, título e menu */
     padding: 1.2rem 5%;
-    position: sticky;                       /* fixo no topo ao rolar */
+    position: sticky;              /* cabeçalho sempre no topo */
     top: 0;
-    z-index: 1000;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.4); /* sombra sutil */
-    animation: fade-in 0.6s ease;           /* entrada suave */
+    z-index: 1000;                 /* fica acima do conteúdo */
+    box-shadow: 0 2px 10px rgba(0,0,0,0.4); /* sombra abaixo */
+    animation: fade-in 0.6s ease;  /* animação suave */
 }
 
-/* logo */
+/* =============================
+   LOGO REDONDA
+   - transforma a logo em círculo
+   - adiciona animação no hover
+============================= */
 header .logo {
     width: 90px;
     height: 90px;
-    border-radius: 50%;
-    transition: transform 0.3s ease;
+    border-radius: 50%;               /* deixa redonda */
+    transition: transform 0.3s ease;  /* animação */
 }
 
 header .logo:hover {
-    transform: scale(1.1);                  /* leve zoom no hover */
+    transform: scale(1.1);           /* zoom leve */
 }
 
-/* texto central */
+/* =============================
+   TEXTO CENTRAL DO HEADER
+   - título e subtítulo centralizados
+============================= */
 .header-text {
     flex: 1;
     display: flex;
     align-items: center;
     flex-direction: column;
     justify-content: center;
-    text-align: center;
+    text-align: center;              /* texto no centro */
 }
 
 .header-text h1 {
     margin: 0;
     font-weight: 600;
     font-size: 1.6rem;
-    letter-spacing: 1px;
+    letter-spacing: 1px;             /* espaçamento suave */
 }
 
 .header-text p {
     font-size: 0.9rem;
-    color: #ccc;
+    color: #ccc;                     /* cinza claro */
     margin: 3px 0 0 0;
 }
 
-/* menu de navegação */
+/* =============================
+   MENU DE NAVEGAÇÃO
+   - botões arredondados
+   - animação no hover
+============================= */
 .link {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 12px;
+    gap: 12px;                        /* espaço entre botões */
 }
 
 .link a {
-    background: #fff;
+    background: #fff;                 /* botão branco */
     color: #111;
     padding: 8px 22px;
-    border-radius: 25px;
+    border-radius: 25px;              /* formato de cápsula */
     font-size: 1rem;
     font-weight: 500;
     text-decoration: none;
     transition: all 0.3s ease;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.25); /* sombra */
 }
 
 .link a:hover {
-    background: #ff0000;
+    background: #ff0000;             /* vermelho no hover */
     color: #fff;
-    transform: translateY(-2px);
+    transform: translateY(-2px);     /* leve subida */
 }
 
-
 /* =============================
-CONTEÚDO PRINCIPAL
+   CONTEÚDO PRINCIPAL
 ============================= */
 .content {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    flex-wrap: wrap;
+    flex-wrap: wrap;                  /* adapta quando faltar espaço */
     gap: 25px;
     padding: 40px 5%;
     animation: fade-in 0.8s ease;
-    border-top: 3px solid #ff0000;
+    border-top: 3px solid #ff0000;    /* linha vermelha decorativa */
 }
 
 /* =============================
-   ARTIGO PRINCIPAL
+   ARTIGO PRINCIPAL (TEXTO)
 ============================= */
 .wiki-section {
     flex: 1;
     min-width: 320px;
     max-width: 850px;
-    background: rgba(255, 255, 255, 0.85);
+    background: rgba(255, 255, 255, 0.85); /* fundo semi-transparente */
     padding: 35px;
-    border-radius: 15px;
+    border-radius: 15px;              /* bordas arredondadas */
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-    backdrop-filter: blur(5px);
+    backdrop-filter: blur(5px);       /* efeito de vidro */
     animation: fade-in 1s ease;
 }
 
 .wiki-section h1,
 .wiki-section h2,
 .wiki-section h3 {
-    border-left: 4px solid #e60000;
+    border-left: 4px solid #e60000;   /* barra vermelha ao lado */
     padding-left: 10px;
     margin-bottom: 15px;
     color: #111;
 }
 
 /* =============================
-   IMAGEM CENTRAL (FIGURE)
+   IMAGENS CENTRALIZADAS
 ============================= */
 figure {
     margin-top: 60px;
@@ -143,11 +155,11 @@ figure img {
     width: 220px;
     border-radius: 12px;
     box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
-    transition: transform 0.3s ease;
+    transition: transform 0.3s ease;   /* animação hover */
 }
 
 figure img:hover {
-    transform: scale(1.05);
+    transform: scale(1.05);           /* zoom */
 }
 
 /* =============================
@@ -164,25 +176,25 @@ figure img:hover {
 
 .sidebar,
 .sidebar2 {
-    background-color: rgba(255, 255, 255, 0.7);
+    background-color: rgba(255, 255, 255, 0.7); /* caixa branca suave */
     padding: 20px;
     width: 80%;
     border-radius: 12px;
     box-shadow: 0 3px 12px rgba(0, 0, 0, 0.1);
-    transition: all 0.3s ease;
     text-align: center;
+    transition: all 0.3s ease;
 }
 
 .sidebar:hover,
 .sidebar2:hover {
-    transform: translateY(-5px);
+    transform: translateY(-5px);       /* sobe um pouquinho */
     box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
 }
 
 .sidebar h3,
 .sidebar2 h4 {
     margin-bottom: 10px;
-    color: #e60000;
+    color: #e60000;                    /* texto vermelho */
     font-weight: 600;
 }
 
@@ -190,7 +202,7 @@ figure img:hover {
    RODAPÉ
 ============================= */
 footer {
-    background: #111;
+    background: #111;                  /* fundo preto */
     color: #fff;
     text-align: center;
     padding: 20px;
@@ -199,29 +211,24 @@ footer {
     letter-spacing: 0.5px;
 }
 
-footer a {
-    color: #e60000;
-    text-decoration: none;
-}
-
-footer a:hover {
-    text-decoration: underline;
-}
-
 /* =============================
-   ANIMAÇÕES E RESPONSIVIDADE
+   ANIMAÇÕES
 ============================= */
 @keyframes fade-in {
     from {
         opacity: 0;
-        transform: translateY(-15px);
+        transform: translateY(-15px); /* começa mais alto */
     }
     to {
         opacity: 1;
-        transform: translateY(0);
+        transform: translateY(0);     /* desce suavemente */
     }
 }
 
+/* =============================
+   RESPONSIVIDADE
+   - Ajusta para telas menores
+============================= */
 @media (max-width: 1024px) {
     .content {
         flex-direction: column;
@@ -239,13 +246,13 @@ footer a:hover {
     }
 
     header {
-        flex-direction: column;
+        flex-direction: column;   /* quebra cabeçalho */
         text-align: center;
         gap: 10px;
     }
 
     .link {
-        flex-wrap: wrap;
+        flex-wrap: wrap;          /* quebra botões */
         justify-content: center;
     }
 
@@ -253,31 +260,32 @@ footer a:hover {
         width: 80%;
     }
 }
-    /* responsividade do header */
-    @media (max-width: 900px) {
-        header {
-            flex-direction: column;
-            text-align: center;
-            padding: 1rem 0.5rem;
-            gap: 10px;
-        }
-    
-        .header-text {
-            width: 100%;
-        }
-    
-        .link {
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-    
-        .link a {
-            padding: 7px 18px;
-            font-size: 0.9rem;
-        }
-    
-        header .logo {
-            width: 75px;
-            height: 75px;
-        }
+
+/* Responsivo para telas menores ainda */
+@media (max-width: 900px) {
+    header {
+        flex-direction: column;
+        text-align: center;
+        padding: 1rem 0.5rem;
+        gap: 10px;
     }
+
+    .header-text {
+        width: 100%;
+    }
+
+    .link {
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .link a {
+        padding: 7px 18px;
+        font-size: 0.9rem;
+    }
+
+    header .logo {
+        width: 75px;
+        height: 75px;
+    }
+}

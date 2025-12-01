@@ -1,110 +1,118 @@
 /* =============================
-   ESTILO GERAL
+   ESTILO GERAL DO SITE
+   Define fonte, cores base e espaçamento geral
 ============================= */
 body {
-    font-family: 'Poppins', Arial, Helvetica, sans-serif;
-    margin: 0;
-    background: #fffdf5;
-    color: #111;
-    line-height: 1.6;
+    font-family: 'Poppins', Arial, Helvetica, sans-serif; /* Fonte principal */
+    margin: 0; /* Remove margem padrão */
+    background: #fffdf5; /* Cor de fundo suave */
+    color: #111; /* Cor padrão do texto */
+    line-height: 1.6; /* Espaçamento das linhas */
 }
 
 /* =============================
    CABEÇALHO UNIFICADO
+   Área do topo do site com logo, título e menu
 ============================= */
 header {
-    background-color: #111;
-    color: #fff;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 1.2rem 5%;
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.4);
-    animation: fade-in 0.6s ease;
+    background-color: #111; /* Fundo preto */
+    color: #fff; /* Texto branco */
+    display: flex; /* Coloca elementos lado a lado */
+    align-items: center; /* Alinha verticalmente */
+    justify-content: space-between; /* Espaço entre logo/texto/menu */
+    padding: 1.2rem 5%; /* Espaçamento interno */
+    position: sticky; /* Faz o header ficar fixo ao rolar */
+    top: 0; /* Fixa no topo */
+    z-index: 1000; /* Fica acima do conteúdo */
+    box-shadow: 0 2px 10px rgba(0,0,0,0.4); /* Sombra */
+    animation: fade-in 0.6s ease; /* Animação ao carregar */
 }
 
-/* logo */
+/* Logo da associação */
 header .logo {
-    width: 90px;
-    height: 90px;
-    border-radius: 50%;
-    transition: transform 0.3s ease;
+    width: 90px; /* Largura */
+    height: 90px; /* Altura */
+    border-radius: 50%; /* Deixa a imagem redonda */
+    transition: transform 0.3s ease; /* Animação ao passar o mouse */
 }
 
+/* Efeito ao passar o mouse */
 header .logo:hover {
-    transform: scale(1.1);
+    transform: scale(1.1); /* Aumenta a logo */
 }
 
-/* texto central */
+/* =============================
+   TEXTO CENTRAL DO CABEÇALHO
+////////////////////////////// */
 .header-text {
-    flex: 1;
+    flex: 1; /* Ocupa espaço central */
     display: flex;
     align-items: center;
-    flex-direction: column;
+    flex-direction: column; /* Coloca o título e subtítulo um abaixo do outro */
     justify-content: center;
     text-align: center;
 }
 
+/* Título principal */
 .header-text h1 {
     margin: 0;
     font-weight: 600;
     font-size: 1.6rem;
-    letter-spacing: 1px;
+    letter-spacing: 1px; /* Espaço entre letras */
 }
 
+/* Subtítulo */
 .header-text p {
     font-size: 0.9rem;
-    color: #ccc;
+    color: #ccc; /* Cinza claro */
     margin: 3px 0 0 0;
 }
 
 /* =============================
-   MENU DE NAVEGAÇÃO
+   MENU DE NAVEGAÇÃO (LINKS)
 ============================= */
 .link {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 15px;
+    gap: 15px; /* Espaço entre botões */
 }
 
 .link a {
-    background: #fff;
-    color: #111;
-    padding: 8px 22px;
-    border-radius: 25px;
+    background: #fff; /* Fundo branco */
+    color: #111; /* Texto preto */
+    padding: 8px 22px; /* Espaçamento interno */
+    border-radius: 25px; /* Torna os botões arredondados */
     font-size: 1rem;
-    text-decoration: none;
-    transition: all 0.3s ease;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+    text-decoration: none; /* Remove sublinhado */
+    transition: all 0.3s ease; /* Animação de hover */
+    box-shadow: 0 2px 6px rgba(0,0,0,0.25); /* Sombra */
     font-weight: 500;
 }
 
+/* Efeito dos botões ao passar o mouse */
 .link a:hover {
-    background: #ff0000;
-    color: #fff;
-    transform: translateY(-2px);
+    background: #ff0000; /* Fica vermelho */
+    color: #fff; /* Texto branco */
+    transform: translateY(-2px); /* Sobe um pouquinho */
 }
 
 /* =============================
-   SEÇÃO CAMPEONATOS / EVENTOS / DOJO
+   SEÇÕES (Campeonatos, Dojo)
 ============================= */
 .campeonatos, .dojo {
-    background: #fffaf0;
+    background: #fffaf0; /* Fundo bege claro */
     padding: 40px 5%;
-    border-top: 3px solid #ff0000;
+    border-top: 3px solid #ff0000; /* Linha vermelha */
     text-align: center;
-    animation: fade-in 0.8s ease;
+    animation: fade-in 0.8s ease; /* Animação */
 }
 
 .campeonatos h1, .dojo h1 {
     font-size: 1.8rem;
     margin-bottom: 30px;
     color: #111;
-    text-transform: uppercase;
+    text-transform: uppercase; /* Deixa tudo em maiúsculas */
     letter-spacing: 1px;
 }
 
@@ -114,35 +122,38 @@ header .logo:hover {
 .imagens, .imagens-dojo {
     display: flex;
     justify-content: center;
-    flex-wrap: wrap;
-    gap: 35px;
+    flex-wrap: wrap; /* Quebra para baixo se faltar espaço */
+    gap: 35px; /* Espaço entre imagens */
     margin-top: 30px;
 }
 
 .imagens figure, .imagens-dojo figure {
-    width: 400px;
+    width: 400px; /* Tamanho do card */
     background: #fff;
     border-radius: 16px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2); /* Sombra */
+    overflow: hidden; /* Impede que a imagem saia do card */
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     text-align: center;
     padding-bottom: 12px;
 }
 
+/* Efeito de levitar ao passar o mouse */
 .imagens figure:hover, .imagens-dojo figure:hover {
     transform: translateY(-10px) scale(1.02);
     box-shadow: 0 8px 20px rgba(0,0,0,0.3);
 }
 
+/* Imagens dentro dos cards */
 .imagens img, .imagens-dojo img {
     width: 100%;
     height: 370px;
-    object-fit: cover;
+    object-fit: cover; /* Ajusta sem distorcer */
     border-bottom: 3px solid #ff0000;
     border-radius: 16px 16px 0 0;
 }
 
+/* Texto abaixo da imagem */
 .imagens figcaption, .imagens-dojo figcaption {
     margin-top: 8px;
     font-size: 0.95rem;
@@ -152,6 +163,7 @@ header .logo:hover {
     padding: 5px 10px;
 }
 
+/* Imagens grandes */
 .img-grande {
     height: 450px;
     width: 100%;
@@ -172,7 +184,7 @@ footer {
 }
 
 footer a {
-    color: #ff0000;
+    color: #ff0000; /* Vermelho */
     text-decoration: none;
 }
 
@@ -181,7 +193,7 @@ footer a:hover {
 }
 
 /* =============================
-   ANIMAÇÕES
+   ANIMAÇÃO UTILIZADA NO SITE
 ============================= */
 @keyframes fade-in {
     from {
@@ -195,11 +207,11 @@ footer a:hover {
 }
 
 /* =============================
-   RESPONSIVIDADE
+   RESPONSIVIDADE (CELULAR / TABLET)
 ============================= */
 @media (max-width: 900px) {
     header {
-        flex-direction: column;
+        flex-direction: column; /* Coloca tudo em coluna */
         text-align: center;
         padding: 1rem 0.5rem;
         gap: 10px;
@@ -210,7 +222,7 @@ footer a:hover {
     }
 
     .link {
-        flex-wrap: wrap;
+        flex-wrap: wrap; /* Quebra links para baixo */
         gap: 10px;
     }
 
@@ -225,7 +237,7 @@ footer a:hover {
     }
 
     .imagens figure, .imagens-dojo figure {
-        width: 90%;
+        width: 90%; /* Menor para celular */
     }
 
     .campeonatos h1, .dojo h1 {
