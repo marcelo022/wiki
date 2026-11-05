@@ -1,158 +1,116 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="description" content="Fotos da Associação Barra Sport Karatê: campeonatos, troca de faixa e treinos no dojo.">
+  <meta name="theme-color" content="#ff6b1a">
   <title>Fotos — Associação Barra Sport Karatê</title>
   <link rel="icon" type="image/png" href="img/karate-modified.png">
-  <link rel="stylesheet" href="css/img.css">
+  <link rel="stylesheet" href="css/style.css">
 </head>
+
 <body>
 
-  <!-- =============================
-       CABEÇALHO DO SITE
-       Contém logo, título e menu
-  ============================== -->
-  <header class="header" id="log">
-    <div class="header-text">
-
-      <!-- Logo principal da associação -->
-      <img src="img/karate.png" alt="Logo da Associação Barra Sport Karatê" class="logo">
-
-      <!-- Nome da associação -->
-      <h1>Associação Barra Sport Karatê</h1>
-
-      <!-- Pequena frase/descrição -->
-      <p>A harmonia entre mente, técnica e movimento</p>
-    </div>
-
-    <!-- Menu de links de navegação -->
-    <div class="link">
-      <a href="index.html">Home</a>
-      <a href="imagens.html" class="active">Fotos</a>
-      <a href="#camp">campeonato</a>
-      <a href="#troca de faixa">troca de faixa</a>
-      <a href="#dojo">Dojo</a>
+  <!-- ===================== NAVEGAÇÃO ===================== -->
+  <header class="nav">
+    <div class="wrap">
+      <a href="index.html" class="brand" aria-label="Associação Barra Sport Karatê, página inicial">
+        <img src="img/karate.png" alt="" width="44" height="44">
+        <span>Barra Sport Karatê</span>
+      </a>
+      <button class="burger" aria-label="Abrir menu" aria-expanded="false" aria-controls="menu"><i></i></button>
+      <nav aria-label="Principal">
+        <ul class="menu" id="menu">
+          <li><a href="index.html#estilo">O estilo</a></li>
+          <li><a href="index.html#dojo">O dojo</a></li>
+          <li><a href="index.html#campeonatos">Campeonatos</a></li>
+          <li><a href="imagens.html" aria-current="page">Fotos</a></li>
+          <li><a href="index.html#treinar" class="btn">Venha treinar</a></li>
+        </ul>
+      </nav>
     </div>
   </header>
 
-  <!-- =============================
-       SEÇÃO 1 — CAMPEONATOS
-       Fotos de campeonatos e treinos
-  ============================== -->
-  <main class="content" id="camp">
-    <section class="campeonatos">
-
-      <!-- Título da seção -->
-      <h1>A Associação Barra Sport Karatê vai para campeonatos</h1>
-
-      <!-- Contêiner com todas as imagens -->
-      <div class="imagens">
-
-        <!-- Cada foto é organizada dentro de <figure> -->
-        <figure>
-          <img src="img/WhatsApp Image 2025-11-11 at 14.27.47.jpeg" alt="Equipe no campeonato regional">
-          <figcaption>Equipe no Campeonato Regional 2025</figcaption>
-        </figure>
-
-        <figure>
-          <img src="img/WhatsApp Image 2025-11-11 at 14.33.19.jpeg" alt="Treino técnico da equipe">
-          <figcaption>Treino técnico da equipe</figcaption>
-        </figure>
-
-        <figure>
-          <img src="img/diego.jpg" alt="Atleta Diego em ação">
-          <figcaption>Atleta Diego em ação</figcaption>
-        </figure>
-
-        <figure>
-          <img src="img/campeonatofilho.jpeg" alt="Competição infantil">
-          <figcaption>Competição infantil — novos talentos</figcaption>
-        </figure>
-
-        <figure>
-          <img src="img/WhatsApp Image 2025-11-12 at 16.35.24.jpeg" alt="Treinamento especial Wado-Ryu">
-          <figcaption>Treinamento especial de Wado-Ryu</figcaption>
-        </figure>
-
-        <figure>
-          <img src="img/eu.jpg" alt="Instrutor Marcelo Campos">
-          <figcaption>Instrutor Marcelo Campos</figcaption>
-        </figure>
+  <main>
+    <section class="page-head">
+      <div class="wrap">
+        <h1>Nossas <span>fotos.</span></h1>
+        <p>Campeonatos, trocas de faixa e o dia a dia no dojo. Clique numa foto para ampliar.</p>
+        <div class="filters" role="group" aria-label="Filtrar fotos">
+          <button class="filter" data-filter="all" aria-pressed="true">Todas<span class="n"></span></button>
+          <button class="filter" data-filter="campeonato" aria-pressed="false">Campeonatos<span class="n"></span></button>
+          <button class="filter" data-filter="faixa" aria-pressed="false">Troca de faixa<span class="n"></span></button>
+          <button class="filter" data-filter="dojo" aria-pressed="false">Dojo<span class="n"></span></button>
+        </div>
       </div>
     </section>
 
-    <!-- =============================
-         SEÇÃO 2 — TROCA DE FAIXA
-         Fotos do evento anual
-    ============================== -->
-    <!-- Obs: espaço no ID pode causar erro, mas deixei como você colocou -->
-    <section class="troca de faixa" id="troca de faixa">
-      <h1 class="campeonatos">Momentos da troca de faixa</h1>
+    <section>
+      <div class="wrap">
+        <div class="gallery">
+          <!-- Troca de faixa -->
+          <button class="ph zoom wide" data-cat="faixa"><img src="img/juntos.jpeg" alt="Turma reunida na troca de faixa de 2024" loading="lazy"></button>
+          <button class="ph zoom" data-cat="faixa"><img src="img/luta.jpeg" alt="Luta na troca de faixa" loading="lazy"></button>
+          <button class="ph zoom" data-cat="faixa"><img src="img/alunos2.jpeg" alt="Treino em grupo na troca de faixa de 2024" loading="lazy"></button>
+          <button class="ph zoom" data-cat="faixa"><img src="img/alunos3.jpeg" alt="Alunos durante o treino na troca de faixa de 2024" loading="lazy"></button>
 
-      <div class="imagens">
+          <!-- Campeonatos -->
+          <button class="ph zoom" data-cat="campeonato"><img src="img/WhatsApp Image 2025-11-11 at 14.27.47.jpeg" alt="Equipe no Campeonato Regional 2025" loading="lazy"></button>
+          <button class="ph zoom" data-cat="campeonato"><img src="img/WhatsApp Image 2025-11-11 at 14.33.19.jpeg" alt="Treino técnico da equipe" loading="lazy"></button>
+          <button class="ph zoom" data-cat="campeonato"><img src="img/diego.jpg" alt="Atleta Diego em ação" loading="lazy"></button>
+          <button class="ph zoom" data-cat="campeonato"><img src="img/campeonatofilho.jpeg" alt="Competição infantil: novos talentos" loading="lazy"></button>
+          <button class="ph zoom" data-cat="campeonato"><img src="img/WhatsApp Image 2025-11-12 at 16.35.24.jpeg" alt="Treinamento especial de Wado-Ryu" loading="lazy"></button>
+          <button class="ph zoom" data-cat="campeonato"><img src="img/eu.jpg" alt="Instrutor Marcelo Campos" loading="lazy"></button>
 
-        <figure>
-          <img src="img/alunos2.jpeg" alt="Treino em grupo">
-          <figcaption>2024 troca de faixa</figcaption>
-        </figure>
-
-        <figure>
-          <img src="img/alunos3.jpeg" alt="Alunos durante o treino">
-          <figcaption>2024 troca de faixa</figcaption>
-        </figure>
-
-        <figure>
-          <img src="img/juntos.jpeg" alt="Confraternização de fim de ano" class="img-grande">
-          <figcaption>2024 troca de faixa</figcaption>
-        </figure>
-
-        <figure>
-          <img src="img/luta.jpeg" alt="Sensei e alunos">
-          <figcaption>Luta na troca de faixa</figcaption>
-        </figure>
-
-      </div>
-    </section>
-
-    <!-- =============================
-         SEÇÃO 3 — DOJO
-         Fotos do local de treino
-    ============================== -->
-    <section class="dojo" id="dojo">
-
-      <!-- Título da seção -->
-      <h1>Nosso Dojo — O Local de Treino</h1>
-
-      <!-- Contêiner das imagens do dojo -->
-      <div class="imagens-dojo">
-
-        <figure>
-          <img src="img/IMG-20251201-WA0000.jpg" alt="Turma posicionada para foto">
-          <figcaption>Turma posicionada para foto</figcaption>
-        </figure>
-
-        <figure>
-          <img src="img/IMG-20251201-WA0018.jpg" alt="Treino de alunos no Dojo">
-          <figcaption>Treino dos alunos</figcaption>
-        </figure>
-
-        <figure>
-          <img src="img/IMG-20251201-WA0015.jpg" alt="Turma reunida para o treino">
-          <figcaption>Turma reunida para o treino</figcaption>
-        </figure>
-
+          <!-- Dojo -->
+          <button class="ph zoom wide" data-cat="dojo"><img src="img/IMG-20251201-WA0000.jpg" alt="Turma posicionada para foto no dojo" loading="lazy"></button>
+          <button class="ph zoom" data-cat="dojo"><img src="img/IMG-20251201-WA0018.jpg" alt="Treino dos alunos no dojo" loading="lazy"></button>
+          <button class="ph zoom" data-cat="dojo"><img src="img/IMG-20251201-WA0015.jpg" alt="Turma reunida para o treino" loading="lazy"></button>
+        </div>
       </div>
     </section>
   </main>
 
-  <!-- =============================
-       RODAPÉ DO SITE
-       Informações finais
-  ============================== -->
+  <!-- ===================== LIGHTBOX ===================== -->
+  <div class="lightbox" role="dialog" aria-modal="true" aria-label="Foto ampliada" aria-hidden="true">
+    <div class="lb-top">
+      <span class="lb-count"></span>
+      <button class="lb-btn lb-close" aria-label="Fechar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+    </div>
+    <img src="" alt="">
+    <div class="lb-bottom">
+      <button class="lb-btn lb-prev" aria-label="Foto anterior">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>
+      </button>
+      <p class="lb-cap"></p>
+      <button class="lb-btn lb-next" aria-label="Próxima foto">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- ===================== RODAPÉ ===================== -->
   <footer>
-    <p>© 2025 Associação Barra Sport Karatê — Site desenvolvido por Marcelo Campos.</p>
+    <div class="wrap">
+      <a href="index.html" class="brand">
+        <img src="img/karate.png" alt="" width="44" height="44">
+        <span>Barra Sport Karatê</span>
+      </a>
+      <nav aria-label="Rodapé">
+        <a href="index.html#estilo">O estilo</a>
+        <a href="index.html#dojo">O dojo</a>
+        <a href="index.html#campeonatos">Campeonatos</a>
+        <a href="imagens.html">Fotos</a>
+      </nav>
+      <p class="copy">© <span data-year>2025</span> Associação Barra Sport Karatê. Site desenvolvido por Marcelo Campos.</p>
+    </div>
   </footer>
 
+  <script src="js/main.js"></script>
 </body>
+
 </html>

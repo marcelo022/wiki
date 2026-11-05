@@ -3,115 +3,189 @@
 
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Associação Barra Sport Karatê - Wiki</title>
-  <link rel="stylesheet" href="css/style.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="description" content="Associação Barra Sport Karatê: karatê tradicional estilo Wado-Ryu para crianças, jovens e adultos.">
+  <meta name="theme-color" content="#ff6b1a">
+  <title>Associação Barra Sport Karatê</title>
   <link rel="icon" type="image/png" href="img/karate-modified.png">
+  <link rel="stylesheet" href="css/style.css">
 </head>
 
+<body class="has-bar">
 
-<body>
-
-  <!-- ============================
-       CABEÇALHO DO SITE
-       Contém o logo, título e menu
-     ============================ -->
-  <header class="header">
-
-    <div class="header-text">
-      <!-- Logo da Associação -->
-      <img src="img/karate.png" alt="Logo da Associação Barra Sport Karatê" class="logo">
-
-      <!-- Nome principal do site -->
-      <h1>Associação Barra Sport Karatê</h1>
-
-      <!-- Slogan do dojo -->
-      <p>A harmonia entre mente, técnica e movimento</p>
-    </div>
-
-    <!-- Menu de navegação -->
-    <div class="link">
-      <a href="index.html">Home</a>
-      <a href="imagens.html">Fotos</a>
+  <!-- ===================== NAVEGAÇÃO ===================== -->
+  <header class="nav">
+    <div class="wrap">
+      <a href="index.html" class="brand" aria-label="Associação Barra Sport Karatê, página inicial">
+        <img src="img/karate.png" alt="" width="46" height="46">
+        <span>Barra Sport Karatê</span>
+      </a>
+      <button class="burger" aria-label="Abrir menu" aria-expanded="false" aria-controls="menu"><i></i></button>
+      <nav aria-label="Principal">
+        <ul class="menu" id="menu">
+          <li><a href="#estilo">O estilo</a></li>
+          <li><a href="#dojo">O dojo</a></li>
+          <li><a href="#campeonatos">Campeonatos</a></li>
+          <li><a href="imagens.html">Fotos</a></li>
+          <li><a href="#treinar" class="btn">Venha treinar</a></li>
+        </ul>
+      </nav>
     </div>
   </header>
 
-  <!-- ============================
-       CONTEÚDO PRINCIPAL DO SITE
-     ============================ -->
-  <main class="content">
-
-    <!-- SEÇÃO TIPO WIKI (artigo explicativo) -->
-    <section class="wiki-section">
-
-      <!-- Artigo informativo sobre o estilo Wado-Ryu -->
-      <article>
-        <h1>Qual o estilo praticado pela Associação Barra Sport Karatê?</h1>
-        <p>O estilo praticado é o Wado-Ryu, um dos quatro principais estilos do Karatê tradicional.</p>
-
-        <h2>O que é Wado-Ryu?</h2>
-        <p>O Wado-Ryu é um dos quatro principais estilos de Karatê do Japão. Criado por Hironori Otsuka, combina técnicas do
-          Karatê com movimentos do Jiu-Jitsu japonês, focando em esquivas e fluidez.</p>
-
-        <!-- Origem do estilo -->
-        <h3>Origem</h3>
-        <p>Fundado em 1939, o Wado-Ryu significa “Caminho da Harmonia”, destacando princípios de paz, disciplina e
-          autodesenvolvimento.</p>
-
-        <!-- Lista de características -->
-        <h3>Características do estilo</h3>
-        <ul>
-          <li>Ênfase em Tai Sabaki (movimento do corpo)</li>
-          <li>Defesas circulares e esquivas</li>
-          <li>Movimentos rápidos e econômicos</li>
-          <li>Integração com Jujutsu clássico</li>
-        </ul>
-      </article>
-
-      <!-- Imagem relacionada ao conteúdo -->
-      <figure>
-        <img src="img/karate.png" alt="Emblema Wado-Ryu da associação">
-        <figcaption>Emblema representativo da Associação Barra Sport Karatê</figcaption>
-      </figure>
+  <main>
+    <!-- ===================== HERO ===================== -->
+    <section class="hero" id="inicio">
+      <div class="hero-grid">
+        <div class="hero-text">
+          <span class="tag">Wado-Ryu desde 1939</span>
+          <h1>Treina <span>com a gente.</span></h1>
+          <p>Karatê tradicional para crianças, jovens e adultos na Associação Barra Sport Karatê. Tatame, faixa e campeonato.</p>
+          <div class="actions">
+            <a href="#treinar" class="btn">Quero treinar
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </a>
+            <a href="imagens.html" class="btn light">Ver as fotos</a>
+          </div>
+        </div>
+        <figure class="ph">
+          <img src="img/juntos.jpeg" alt="Alunos e senseis da associação reunidos no tatame com os certificados da troca de faixa" width="1280" height="960">
+        </figure>
+      </div>
     </section>
 
-    <!-- ============================
-         BARRAS LATERAIS
-         Informações extras
-       ============================ -->
-    <div class="container">
-
-      <!-- Primeira barra lateral com curiosidades -->
-      <div class="sidebar">
-        <h3>Curiosidades</h3>
-        <ul>
-          <li>Criado por Hironori Otsuka</li>
-          <li>Estilo reconhecido mundialmente</li>
-          <li>Suavidade e eficiência combinadas</li>
-          <li>Movimento e esquiva são fundamentais</li>
-        </ul>
-      </div>
-
-      <!-- Segunda barra lateral com dados de contato -->
-      <div class="sidebar2">
-        <h4>Onde nos achar</h4>
-        <ul>
-          <li>📍 Endereço da academia</li>
-          <li>📞 Telefone</li>
-          <li>🌐 Redes sociais</li>
-        </ul>
-      </div>
+    <div class="ticker" aria-hidden="true">
+      <div class="row"><span>Mente</span><b>✦</b><span>Técnica</span><b>✦</b><span>Movimento</span><b>✦</b><span>Disciplina</span><b>✦</b><span>Respeito</span><b>✦</b><span>Harmonia</span><b>✦</b></div><div class="row"><span>Mente</span><b>✦</b><span>Técnica</span><b>✦</b><span>Movimento</span><b>✦</b><span>Disciplina</span><b>✦</b><span>Respeito</span><b>✦</b><span>Harmonia</span><b>✦</b></div>
     </div>
+
+    <!-- ===================== O ESTILO ===================== -->
+    <section id="estilo">
+      <div class="wrap estilo-grid">
+        <figure class="ph zoom">
+          <img src="img/luta.jpeg" alt="Dois alunos em luta no tatame durante a troca de faixa" loading="lazy">
+        </figure>
+        <div class="estilo-txt">
+          <h2>O estilo Wado-Ryu</h2>
+          <p>
+            Criado por Hironori Otsuka, o Wado-Ryu é um dos quatro grandes estilos do karatê japonês. Ele combina
+            o karatê com movimentos do jiu-jitsu: em vez de bloquear a força, você sai da linha do ataque.
+          </p>
+          <ul class="traits">
+            <li><b lang="ja">体</b><div><strong>Tai sabaki</strong><span>O movimento do corpo vem antes da força.</span></div></li>
+            <li><b lang="ja">円</b><div><strong>Defesas circulares</strong><span>Esquivas que desviam o golpe em vez de pará-lo.</span></div></li>
+            <li><b lang="ja">速</b><div><strong>Rápido e econômico</strong><span>Movimentos diretos, sem gesto sobrando.</span></div></li>
+            <li><b lang="ja">柔</b><div><strong>Raiz no jujutsu</strong><span>Técnicas do jujutsu clássico dentro do karatê.</span></div></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== HISTÓRIA (faixa azul) ===================== -->
+    <section class="historia" id="historia">
+      <div class="wrap">
+        <p class="kanji" lang="ja" aria-hidden="true">和<em>道</em></p>
+        <div class="txt">
+          <h2>Caminho da harmonia</h2>
+          <p>
+            “Wado” quer dizer caminho da harmonia. Hironori Otsuka treinou jiu-jitsu desde jovem, começou no karatê
+            em 1922 e uniu as duas artes. Em 1939 o estilo ganhou o nome Wado-Ryu, com princípios de paz, disciplina
+            e autodesenvolvimento.
+          </p>
+          <div class="years"><span>1892</span><span>1922</span><span>1939</span><span>Hoje, aqui</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== O DOJO ===================== -->
+    <section id="dojo">
+      <div class="wrap">
+        <div class="head">
+          <div>
+            <h2>O dia a dia no dojo</h2>
+            <p>Turmas de todas as idades treinam juntas no mesmo tatame, do primeiro kihon à luta.</p>
+          </div>
+          <a href="imagens.html#dojo" class="more">Fotos do dojo
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+        </div>
+        <div class="dojo-grid">
+          <a class="ph" href="imagens.html#dojo"><img src="img/IMG-20251201-WA0000.jpg" alt="Turma posicionada para foto no dojo" loading="lazy"></a>
+          <a class="ph" href="imagens.html#dojo"><img src="img/IMG-20251201-WA0018.jpg" alt="Alunos treinando no dojo" loading="lazy"></a>
+          <a class="ph" href="imagens.html#dojo"><img src="img/IMG-20251201-WA0015.jpg" alt="Turma reunida para o treino" loading="lazy"></a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== CAMPEONATOS ===================== -->
+    <section id="campeonatos" class="camp">
+      <div class="wrap">
+        <div class="head">
+          <div>
+            <span class="tag orange">Equipe de competição</span>
+            <h2>Rumo ao <em>pódio</em></h2>
+            <p>Nossos atletas competem em torneios regionais e paulistas, das categorias infantis ao adulto.</p>
+          </div>
+          <a href="imagens.html#campeonato" class="more">Fotos dos campeonatos
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+        </div>
+        <div class="camp-grid">
+          <a class="ph" href="imagens.html#campeonato"><img src="img/diego.jpg" alt="Atleta Diego em ação" loading="lazy"></a>
+          <a class="ph" href="imagens.html#campeonato"><img src="img/WhatsApp Image 2025-11-11 at 14.27.47.jpeg" alt="Equipe no Campeonato Regional 2025" loading="lazy"></a>
+          <a class="ph" href="imagens.html#campeonato"><img src="img/WhatsApp Image 2025-11-11 at 14.33.19.jpeg" alt="Treino técnico da equipe" loading="lazy"></a>
+          <a class="ph" href="imagens.html#campeonato"><img src="img/campeonatofilho.jpeg" alt="Competição infantil: novos talentos" loading="lazy"></a>
+          <a class="ph" href="imagens.html#campeonato"><img src="img/WhatsApp Image 2025-11-12 at 16.35.24.jpeg" alt="Treinamento especial de Wado-Ryu" loading="lazy"></a>
+          <a class="ph" href="imagens.html#campeonato"><img src="img/eu.jpg" alt="Instrutor Marcelo Campos" loading="lazy"></a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== VENHA TREINAR ===================== -->
+    <section class="treinar" id="treinar">
+      <div class="wrap">
+        <div class="txt">
+          <span class="tag ink">Sem experiência? Sem problema.</span>
+          <h2>Seu primeiro treino <span>começa aqui.</span></h2>
+          <p>Crianças, jovens e adultos podem começar. Só precisa de vontade de aprender.</p>
+          <!-- TODO (dono do site): adicionar endereço (rua e bairro), horários e o link das redes sociais. -->
+          <dl>
+            <div><dt>Estilo</dt><dd>Karatê Wado-Ryu</dd></div>
+            <div><dt>Turmas</dt><dd>Crianças, jovens e adultos</dd></div>
+            <div><dt>Graduação</dt><dd>Troca de faixa com certificado</dd></div>
+          </dl>
+          <div class="actions">
+            <a href="imagens.html" class="btn">Ver as fotos
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </a>
+          </div>
+        </div>
+        <figure class="ph">
+          <img src="img/alunos2.jpeg" alt="Alunos em formação durante o treino" loading="lazy">
+        </figure>
+      </div>
+    </section>
   </main>
 
-  <!-- ============================
-       RODAPÉ DO SITE
-       Informações finais
-     ============================ -->
+  <!-- ===================== RODAPÉ ===================== -->
   <footer>
-    <p>© 2025 Associação Barra Sport Karatê — Site desenvolvido por Marcelo Campos.</p>
+    <div class="wrap">
+      <a href="index.html" class="brand">
+        <img src="img/karate.png" alt="" width="46" height="46">
+        <span>Barra Sport Karatê</span>
+      </a>
+      <nav aria-label="Rodapé">
+        <a href="#estilo">O estilo</a>
+        <a href="#dojo">O dojo</a>
+        <a href="#campeonatos">Campeonatos</a>
+        <a href="imagens.html">Fotos</a>
+      </nav>
+      <p class="copy">© <span data-year>2025</span> Associação Barra Sport Karatê. Site desenvolvido por Marcelo Campos.</p>
+    </div>
   </footer>
 
+  <div class="phone-bar"><a href="#treinar" class="btn">Quero treinar</a></div>
+
+  <script src="js/main.js"></script>
 </body>
 
 </html>
