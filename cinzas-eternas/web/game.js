@@ -60,6 +60,9 @@ const SFX = {
   victory: () => { tone(220, 440, 1.3, 'triangle', 0.18); tone(330, 660, 1.5, 'sine', 0.1); },
   ui: () => tone(620, 480, 0.06, 'square', 0.05), gate: () => { tone(300, 600, 0.8, 'sine', 0.1); tone(450, 900, 0.9, 'sine', 0.06); },
   parry: () => { tone(1500, 900, 0.2, 'square', 0.1); },
+  deflect: () => { tone(2100, 1400, 0.16, 'square', 0.12); tone(3100, 2500, 0.22, 'triangle', 0.08); noise(0.08, 5000, 0.25, 3); },
+  block: () => { tone(420, 220, 0.12, 'square', 0.1); noise(0.1, 1600, 0.2, 1.5); },
+  deathblow: () => { tone(90, 30, 0.9, 'sine', 0.45); noise(0.6, 700, 0.35, 0.6); tone(1400, 300, 0.45, 'sawtooth', 0.08); },
 };
 function sfx(n) { try { SFX[n] && SFX[n](); } catch (e) { } }
 
@@ -82,8 +85,8 @@ const B_ = (name, epi, shape, o) => Object.assign({ name, epi, shape, r: 28, hp:
 const REALMS = [
   { myth: 'Mitologia Grega', name: 'Labirinto de Creta', floor: '#1e1c19', tile: '#28251f', line: '#332f27', accent: '#e0c27a', obs: '#5a554b', obsTop: '#cfc6b0', obsKind: ['column', 'column', 'pillar'],
     skins: { hollow: { name: 'Hoplita Esqueleto', col: '#cfc6b0', deco: ['bones', 'helm'] }, hound: { name: 'Harpia', col: '#8a6a4a', deco: ['wings'] },
-      archer: { name: 'Sátiro Arqueiro', col: '#7a5a3a', deco: ['horns'] }, knight: { name: 'Guardião de Bronze', col: '#b08d57', deco: ['helm'] },
-      caster: { name: 'Lâmia', col: '#5a7a5a', deco: ['snakes'] }, brute: { name: 'Ciclope', col: '#9a8a76', deco: ['oneEye'] } },
+      archer: { post: 4, name: 'Sátiro Arqueiro', col: '#7a5a3a', deco: ['horns'] }, knight: { name: 'Guardião de Bronze', col: '#b08d57', deco: ['helm'] },
+      caster: { post: 4, name: 'Lâmia', col: '#5a7a5a', deco: ['snakes'] }, brute: { name: 'Ciclope', col: '#9a8a76', deco: ['oneEye'] } },
     bosses: [
       B_('Minotauro', 'Senhor do Labirinto', 'beast', { r: 34, hp: 640, pref: 100, col: '#5e3b2a', col2: '#e04a3a', attacks: ['charge', 'combo', 'pounce', 'cleave'], p2: ['roar'], deco: { horns: 1 } }),
       B_('Medusa', 'O Olhar que Petrifica', 'witch', { r: 25, hp: 540, pref: 280, col: '#3f6b4a', col2: '#b8ff9a', attacks: ['beam', 'volley', 'teleport', 'spiral'], p2: ['summon'], deco: { snakes: 1 } }),
@@ -158,12 +161,12 @@ const REALMS = [
 const BIOMES = REALMS;
 const realmOf = n => REALMS[Math.floor((n - 1) / 3) % REALMS.length];
 const ETYPES = {
-  hollow: { name: 'Morto-vivo', r: 13, hp: 42, spd: 72, dmg: 14, range: 34, wind: 0.55, cd: 1.4, col: '#8a8070', souls: 15, kind: 'melee' },
-  hound: { name: 'Cão Pútrido', r: 11, hp: 28, spd: 155, dmg: 11, range: 120, wind: 0.42, cd: 1.3, col: '#6e4b36', souls: 18, kind: 'lunge' },
+  hollow: { post: 5, name: 'Morto-vivo', r: 13, hp: 42, spd: 72, dmg: 14, range: 34, wind: 0.55, cd: 1.4, col: '#8a8070', souls: 15, kind: 'melee' },
+  hound: { post: 4, name: 'Cão Pútrido', r: 11, hp: 28, spd: 155, dmg: 11, range: 120, wind: 0.42, cd: 1.3, col: '#6e4b36', souls: 18, kind: 'lunge' },
   archer: { name: 'Arqueiro', r: 12, hp: 30, spd: 62, dmg: 12, range: 330, wind: 0.8, cd: 2.2, col: '#5a7060', souls: 20, kind: 'ranged' },
-  knight: { name: 'Cavaleiro Oco', r: 16, hp: 115, spd: 56, dmg: 24, range: 46, wind: 0.8, cd: 1.8, col: '#707a88', souls: 45, kind: 'melee', poise: true },
+  knight: { post: 9, name: 'Cavaleiro Oco', r: 16, hp: 115, spd: 56, dmg: 24, range: 46, wind: 0.8, cd: 1.8, col: '#707a88', souls: 45, kind: 'melee', poise: true },
   caster: { name: 'Clérigo Profano', r: 12, hp: 36, spd: 52, dmg: 17, range: 280, wind: 0.9, cd: 3.0, col: '#7a4a8a', souls: 35, kind: 'caster' },
-  brute: { name: 'Bruto', r: 20, hp: 170, spd: 48, dmg: 30, range: 58, wind: 1.0, cd: 2.2, col: '#7d5a4a', souls: 70, kind: 'slam', poise: true },
+  brute: { post: 12, name: 'Bruto', r: 20, hp: 170, spd: 48, dmg: 30, range: 58, wind: 1.0, cd: 2.2, col: '#7d5a4a', souls: 70, kind: 'slam', poise: true },
 };
 
 /* ---------- estado ---------- */
@@ -179,7 +182,7 @@ window.addEventListener('keydown', e => {
   initAudio();
   if (!keys[e.code]) {
     keys[e.code] = true;
-    const m = { KeyJ: 'atk', KeyZ: 'atk', KeyK: 'heavy', KeyX: 'heavy', Space: 'roll', KeyL: 'roll', ShiftLeft: 'roll', KeyE: 'heal', KeyH: 'heal', KeyQ: 'lock', Tab: 'lock', Escape: 'pause', KeyP: 'pause' };
+    const m = { KeyJ: 'atk', KeyZ: 'atk', KeyK: 'heavy', KeyX: 'heavy', Space: 'roll', KeyL: 'roll', ShiftLeft: 'roll', KeyE: 'heal', KeyH: 'heal', KeyQ: 'lock', Tab: 'lock', KeyI: 'guard', KeyC: 'guard', ShiftRight: 'guard', Escape: 'pause', KeyP: 'pause' };
     if (m[e.code]) act(m[e.code]);
     if (e.code === 'Enter' && uiButtons.length) { uiButtons[0].fn(); }
   }
@@ -192,10 +195,11 @@ function ctrlButtons() {
   const s = clamp(H / 420, 0.8, 1.2);
   return [
     { id: 'atk', label: 'ATAQUE', x: W - 88 * s, y: H - 86 * s, r: 44 * s },
-    { id: 'roll', label: 'ROLAR', x: W - 196 * s, y: H - 60 * s, r: 37 * s },
+    { id: 'guard', label: 'DEFESA', x: W - 200 * s, y: H - 150 * s, r: 38 * s },
+    { id: 'roll', label: 'ROLAR', x: W - 200 * s, y: H - 52 * s, r: 33 * s },
     { id: 'heavy', label: 'FORTE', x: W - 78 * s, y: H - 196 * s, r: 33 * s },
-    { id: 'heal', label: 'CURA', x: W - 180 * s, y: H - 166 * s, r: 30 * s },
-    { id: 'lock', label: 'MIRA', x: W - 52 * s, y: H - 284 * s, r: 25 * s },
+    { id: 'heal', label: 'CURA', x: W - 172 * s, y: H - 246 * s, r: 26 * s },
+    { id: 'lock', label: 'MIRA', x: W - 52 * s, y: H - 284 * s, r: 24 * s },
   ];
 }
 function pointerDown(id, x, y) {
@@ -241,7 +245,7 @@ function moveInput() {
 
 /* ---------- geração de fases ---------- */
 function newPlayer() {
-  return { x: 0, y: 0, r: 13, hp: maxHp(), st: maxSt(), face: -PI / 2, act: null, iframe: 0, stDelay: 0, flasks: flaskMax(), buf: null, dead: false, stag: 0, kvx: 0, vky: 0, kvy: 0, hpTrail: maxHp() };
+  return { x: 0, y: 0, r: 13, hp: maxHp(), st: maxSt(), face: -PI / 2, act: null, iframe: 0, stDelay: 0, flasks: flaskMax(), buf: null, dead: false, post: 0, postT: 0, lastGuard: -9, stag: 0, kvx: 0, vky: 0, kvy: 0, hpTrail: maxHp() };
 }
 function buildStage(n) {
   const rng = mulberry32(n * 7919 + 13);
@@ -278,6 +282,7 @@ function buildStage(n) {
   P.x = w / 2; P.y = h - 90; P.face = -PI / 2; P.act = null; P.stag = 0; P.buf = null;
   cam.x = P.x - W / SC / 2; cam.y = P.y - H / SC / 2;
   banner = { text: isBoss ? `Fase ${n} · Covil do Chefe` : `Fase ${n}`, sub: `${world.biome.name} — ${world.biome.myth}`, t: 3.2, col: '#e8d9b0' };
+  if (n === 1) msg = { text: 'Toque DEFESA no instante do golpe dourado para APARAR', t: 5, col: '#ffd166' };
   S.stage = n; S.started = true; S.best = Math.max(S.best, n); persist();
 }
 function skinOf(type) {
@@ -289,7 +294,7 @@ function makeEnemy(type, x, y, n, minion) {
   const d = ETYPES[type], hf = 1 + (n - 1) * 0.13, df = 1 + (n - 1) * 0.07;
   return { type, d, x, y, r: d.r, hp: d.hp * hf, mhp: d.hp * hf, dmg: d.dmg * df, spd: d.spd * (1 + Math.min(n * 0.01, 0.3)),
     st: 'idle', t: 0, cd: rnd(0.3, 1.2), face: PI / 2, stag: 0, aggro: !!minion, souls: minion ? 5 : Math.round(d.souls * (1 + (n - 1) * 0.3)),
-    flash: 0, minion: !!minion, wob: R() * TAU, broken: 0, ...skinOf(type) };
+    flash: 0, minion: !!minion, wob: R() * TAU, broken: 0, post: 0, mpost: d.post * (1 + (n - 1) * 0.04), postT: 0, ...skinOf(type) };
 }
 
 /* ---------- chefes ---------- */
@@ -324,7 +329,7 @@ function makeBosses(n, rng) {
     const b = {
       isBoss: true, arch, shape: arch.shape, deco: arch.deco, title, name: title + (twins ? (i ? ' II' : ' I') : ''), epi: arch.epi,
       x: world.w / 2 + (twins ? (i ? 140 : -140) : 0), y: world.h / 3, r, hp, mhp: hp, dmg: 22 * df, sp, spd: 95,
-      attacks: attacks.slice(), p2atk: p2, p2: false, act: null, idle: 1.4 + i * 0.7, face: PI / 2, poise: 14 + n * 0.3, mpoise: 14 + n * 0.3,
+      attacks: attacks.slice(), p2atk: p2, p2: false, act: null, idle: 1.4 + i * 0.7, face: PI / 2, post: 0, mpost: 22 + n * 0.35, postT: 0,
       broken: 0, flash: 0, awake: false, mods, col: i ? shadeHex(hue[0], -25) : hue[0], col2: hue[1], air: false, alpha: 1, strafe: R() < 0.5 ? 1 : -1,
       souls: Math.round(380 * (1 + (n - 1) * 0.35) / count), segs: [], last: null, minionType: arch.minion, glow: 0, wob: 0,
     };
@@ -369,7 +374,8 @@ function separate() {
 
 /* ---------- perigos (ataques telegrafados) ---------- */
 function addHaz(o) {
-  const h = Object.assign({ t: 0, delay: 0.5, active: 0.1, dmg: 10, col: '255,60,40', owner: null, hit: false, fired: false, kb: 170, tk: 0 }, o);
+  const blk = !o.tick && !o.unblock && (o.shape === 'cone' || o.shape === 'rect');
+  const h = Object.assign({ t: 0, delay: 0.5, active: 0.1, dmg: 10, col: blk ? '255,190,60' : '255,60,40', blk, owner: null, hit: false, fired: false, kb: 170, tk: 0 }, o);
   hazards.push(h); return h;
 }
 function hazHits(h, x, y, r) {
@@ -400,7 +406,7 @@ function updHaz(dt) {
       const at = h.t - h.delay;
       if (at <= h.active && !P.dead) {
         if (h.tick) { h.tk -= dt; if (h.tk <= 0 && hazHits(h, P.x, P.y, P.r)) { if (hurtPlayer(h.dmg, h.x, h.y, 40, true)) h.tk = h.tick; } }
-        else if (!h.hit && hazHits(h, P.x, P.y, P.r)) { if (hurtPlayer(h.dmg, h.x, h.y, h.kb)) h.hit = true; }
+        else if (!h.hit && hazHits(h, P.x, P.y, P.r)) { if (hurtPlayer(h.dmg, h.owner && h.owner.hp > 0 && h.shape !== 'rect' ? h.owner.x : h.x, h.owner && h.owner.hp > 0 && h.shape !== 'rect' ? h.owner.y : h.y, h.kb, false, { block: h.blk, owner: h.owner })) h.hit = true; }
       }
     }
   }
@@ -419,7 +425,7 @@ function updProj(dt) {
     if (p.x < 0 || p.y < 0 || p.x > world.w || p.y > world.h) p.life = 0;
     if (!p.ghost) for (const o of world.obs) if (hyp(p.x - o.x, p.y - o.y) < o.r + p.r) { p.life = 0; burst(p.x, p.y, 5, p.col, 90, 'spark'); }
     if (p.life > 0 && !P.dead && hyp(p.x - P.x, p.y - P.y) < p.r + P.r) {
-      if (hurtPlayer(p.dmg, p.x - p.vx, p.y - p.vy, 110)) { p.life = 0; burst(p.x, p.y, 8, p.col, 120, 'spark'); }
+      if (hurtPlayer(p.dmg, p.x - p.vx, p.y - p.vy, 110, false, { block: true, owner: null })) { p.life = 0; burst(p.x, p.y, 8, p.col, 120, 'spark'); }
     }
   }
   projs = projs.filter(p => p.life > 0);
@@ -450,8 +456,53 @@ function floatTxt(x, y, txt, col, sz) { floats.push({ x, y, txt, col, life: 1, s
 
 /* ---------- jogador ---------- */
 function invuln(p) { return p.iframe > 0 || (p.act && p.act.type === 'roll' && p.act.t > 0.02 && p.act.t < 0.34); }
-function hurtPlayer(dmg, sx, sy, kb, noStag) {
+const maxPost = () => 90 + S.end * 6 + S.vit * 3;
+const STATS = { deflects: 0, blocks: 0, deathblows: 0, guardBreaks: 0 };
+function guardResult(dmg, sx, sy, owner) {
+  const g = P.act;
+  if (!g || g.type !== 'guard') return null;
+  if (Math.abs(angDiff(P.face, atan2(sy - P.y, sx - P.x))) > 1.9) return null;
+  const mx = (P.x + sx) / 2, my = (P.y + sy) / 2, ax = P.x + cos(P.face) * 14, ay = P.y + sin(P.face) * 14;
+  if (g.t <= g.win) {
+    // APARO PERFEITO
+    STATS.deflects++; sfx('deflect'); hitstop = Math.max(hitstop, 0.07); shake = Math.max(shake, 4);
+    burst(ax, ay, 16, '#ffd166', 260, 'spark'); burst(ax, ay, 6, '#ffffff', 160, 'spark');
+    floatTxt(ax, ay - 16, 'APARADO', '#ffd166', 12);
+    P.post += dmg * 0.18; P.postT = 0.6; g.deflected = true; P.lastGuard = -9;
+    if (owner && owner.hp > 0) {
+      addPosture(owner, owner.isBoss ? 3 + dmg * 0.04 : 3.2);
+      if (!owner.isBoss && owner.broken <= 0) { owner.stag = owner.d.poise ? 0.3 : 0.55; owner.st = 'idle'; cancelHaz(owner); }
+    }
+  } else {
+    // BLOQUEIO
+    STATS.blocks++; sfx('block'); shake = Math.max(shake, 3);
+    burst(ax, ay, 8, '#d8d8e8', 140, 'spark');
+    const chip = Math.round(dmg * 0.12); P.hp -= chip; if (chip > 0) floatTxt(P.x, P.y - 20, '-' + chip, '#ff9b9b', 11);
+    P.post += dmg * 0.95; P.postT = 1.0;
+    const a = atan2(P.y - sy, P.x - sx); moveEnt(P, cos(a) * 8, sin(a) * 8);
+    if (P.hp <= 0) { die(); return true; }
+  }
+  if (P.post >= maxPost()) {
+    STATS.guardBreaks++; P.post = maxPost() * 0.35; P.act = null; P.stag = 1.1; P.kvx = 0; P.kvy = 0;
+    msg = { text: 'Sua postura foi quebrada!', t: 1.6, col: '#ff6b6b' }; sfx('hurt'); flash = 0.25; shake = 10;
+    burst(P.x, P.y, 20, '#ffd166', 200, 'spark');
+  }
+  P.iframe = Math.max(P.iframe, 0.08);
+  return true;
+}
+function addPosture(e, v) {
+  if (e.broken > 0) return;
+  e.post += v; e.postT = 1.6;
+  if (e.post >= e.mpost) {
+    e.post = e.mpost; e.broken = e.isBoss ? 3.0 : 2.6; cancelHaz(e);
+    if (e.isBoss) { e.act = null; e.air = false; e.alpha = 1; } else { e.st = 'idle'; e.stag = 0; }
+    msg = { text: 'POSTURA QUEBRADA — GOLPE FATAL!', t: 1.8, col: '#ff4a4a' }; sfx('parry');
+    burst(e.x, e.y, 24, '#ffd166', 220, 'spark');
+  }
+}
+function hurtPlayer(dmg, sx, sy, kb, noStag, src) {
   if (P.dead || invuln(P)) return false;
+  if (src && src.block) { const g = guardResult(dmg, sx, sy, src.owner); if (g) return true; }
   dmg = Math.round(dmg);
   P.hp -= dmg; P.iframe = noStag ? 0.18 : 0.5; flash = 0.35; shake = Math.max(shake, noStag ? 3 : 9);
   floatTxt(P.x, P.y - 20, '-' + dmg, '#ff6b6b', 14); burst(P.x, P.y, 10, '#b3202a', 160, 'spark');
@@ -483,6 +534,7 @@ function toggleLock() {
   if (lockT) { lockT = null; return; }
   lockT = nearestTarget(520); if (lockT) sfx('ui');
 }
+const guardHeld = () => !!(keys.KeyI || keys.KeyC || keys.ShiftRight || btnHeld.guard !== undefined);
 function startAct(n, mx, my) {
   const p = P, ml = hyp(mx, my);
   const aim = () => {
@@ -509,6 +561,14 @@ function startAct(n, mx, my) {
     p.act = { type: 'roll', t: 0, dur: 0.44, dx, dy }; p.st -= 22; p.stDelay = 0.55; p.combo = 0; sfx('roll');
     return true;
   }
+  if (n === 'guard') {
+    const spam = gtime - p.lastGuard < 0.55;
+    p.act = { type: 'guard', t: 0, win: spam ? 0.09 : 0.2, dur: 1e9 }; p.lastGuard = gtime; p.combo = 0;
+    if (lockT) p.face = atan2(lockT.y - p.y, lockT.x - p.x);
+    else if (ml > 0.25) p.face = atan2(my, mx);
+    else { const t = nearestTarget(220); if (t) p.face = atan2(t.y - p.y, t.x - p.x); }
+    return true;
+  }
   if (n === 'heal') {
     if (p.flasks <= 0) { msg = { text: 'Sem frascos de Brasa', t: 1.5 }; return true; }
     if (p.hp >= maxHp()) { msg = { text: 'Vida cheia', t: 1 }; return true; }
@@ -522,6 +582,7 @@ function updPlayer(dt) {
   p.iframe -= dt; p.stDelay -= dt;
   if (p.stDelay <= 0 && (!p.act || p.act.type === 'heal')) p.st = Math.min(maxSt(), p.st + 62 * dt);
   p.hpTrail += (p.hp - p.hpTrail) * Math.min(1, dt * 2.5);
+  p.postT -= dt; if (p.postT <= 0) p.post = Math.max(0, p.post - (p.act && p.act.type === 'guard' ? 34 : 20) * (0.4 + 0.6 * p.hp / maxHp()) * dt);
   if (p.buf) { p.buf.t -= dt; if (p.buf.t <= 0) p.buf = null; }
   const [mx, my] = moveInput(), ml = hyp(mx, my);
   if (lockT && (lockT.hp <= 0 || hyp(lockT.x - p.x, lockT.y - p.y) > 650 || (!enemies.includes(lockT) && !bosses.includes(lockT)))) lockT = null;
@@ -534,12 +595,19 @@ function updPlayer(dt) {
       if (a.t >= a.h0 && !a.sw) { a.sw = true; sfx(a.type === 'atk' ? 'swing' : 'heavy'); }
       if (a.t >= a.h0 && a.t <= a.h1 + 0.02) doHits(a);
       if (p.buf && a.t > a.h1 + 0.03) {
-        if (p.buf.n === 'roll' || (p.buf.n === 'atk' && a.type === 'atk' && a.t > a.h1 + 0.06) || (p.buf.n === 'heavy' && a.t > a.dur - 0.15)) { p.act = null; }
+        if (p.buf.n === 'roll' || p.buf.n === 'guard' || (p.buf.n === 'atk' && a.type === 'atk' && a.t > a.h1 + 0.06) || (p.buf.n === 'heavy' && a.t > a.dur - 0.15)) { p.act = null; }
       }
     } else if (a.type === 'roll') {
       const k = 1 - a.t / a.dur; moveEnt(p, a.dx * 400 * (0.35 + 0.65 * k) * dt, a.dy * 400 * (0.35 + 0.65 * k) * dt);
       if (R() < 0.5) parts.push({ x: p.x + rnd(-6, 6), y: p.y + rnd(-6, 6), vx: 0, vy: 0, life: 0.4, ml: 0.4, col: 'rgba(200,190,170,0.5)', sz: rnd(3, 6), type: 'dust' });
       if (p.buf && p.buf.n !== 'roll' && a.t > a.dur - 0.08) p.act = null;
+    } else if (a.type === 'guard') {
+      moveEnt(p, mx * 70 * dt, my * 70 * dt);
+      if (lockT) p.face = atan2(lockT.y - p.y, lockT.x - p.x);
+      else { const t = nearestTarget(220); if (t) p.face = turnTo(p.face, atan2(t.y - p.y, t.x - p.x), 10 * dt); else if (ml > 0.1) p.face = atan2(my, mx); }
+      if (p.buf && p.buf.n !== 'guard') p.act = null;
+      else if (!guardHeld() && a.t > a.win) p.act = null;
+      else if (p.buf && p.buf.n === 'guard') { p.buf = null; startAct('guard', mx, my); }
     } else if (a.type === 'heal') {
       moveEnt(p, mx * 55 * dt, my * 55 * dt);
       if (a.t >= 0.55 && !a.done) { a.done = true; p.hp = Math.min(maxHp(), p.hp + maxHp() * 0.42); sfx('heal'); burst(p.x, p.y, 22, '#ffb347', 90, 'spark'); floatTxt(p.x, p.y - 24, 'Brasa', '#ffb347'); }
@@ -569,27 +637,35 @@ function doHits(a) {
   }
 }
 function damageEnemy(e, dmg, poise, heavy) {
-  let crit = false;
-  if (e.broken > 0 || (e.stag > 0.35 && !e.isBoss)) { dmg *= e.isBoss ? 1.8 : 1.4; crit = true; }
-  dmg = Math.round(dmg * rnd(0.92, 1.08));
-  e.hp -= dmg; e.flash = 0.12; e.aggro = true; if (e.isBoss && !e.awake) wakeBosses();
-  floatTxt(e.x + rnd(-8, 8), e.y - e.r - 6, (crit ? '✦' : '') + dmg, crit ? '#ffd166' : '#f2e9d8', crit ? 17 : 13);
   const a = atan2(e.y - P.y, e.x - P.x);
+  e.aggro = true; if (e.isBoss && !e.awake) wakeBosses();
+  if (e.broken > 0) {
+    // GOLPE FATAL
+    STATS.deathblows++; sfx('deathblow'); hitstop = 0.18; shake = 16; flash = 0;
+    burst(e.x, e.y, 40, '#c0101a', 300, 'spark'); burst(e.x, e.y, 20, '#ffd166', 200, 'spark');
+    const dd = e.isBoss ? Math.round(Math.max(e.mhp * 0.3, dmg * 3)) : Math.ceil(e.hp);
+    e.hp -= dd; e.flash = 0.25; e.broken = 0; e.post = 0;
+    floatTxt(e.x, e.y - e.r - 14, 'GOLPE FATAL  ' + dd, '#ff4a4a', 18);
+    if (e.hp <= 0) kill(e);
+    return;
+  }
+  let crit = false;
+  if (e.stag > 0.35 && !e.isBoss) { dmg *= 1.4; crit = true; }
+  dmg = Math.round(dmg * rnd(0.92, 1.08));
+  e.hp -= dmg; e.flash = 0.12;
+  floatTxt(e.x + rnd(-8, 8), e.y - e.r - 6, (crit ? '✦' : '') + dmg, crit ? '#ffd166' : '#f2e9d8', crit ? 17 : 13);
   burst(e.x - cos(a) * e.r * 0.5, e.y - sin(a) * e.r * 0.5, heavy ? 14 : 8, e.isBoss ? e.col2 : '#e8d9b0', heavy ? 240 : 170, 'spark');
   sfx('hit'); hitstop = heavy ? 0.075 : 0.04; shake = Math.max(shake, heavy ? 6 : 3);
-  if (e.isBoss) {
-    e.poise -= poise;
-    if (e.poise <= 0 && e.broken <= 0) {
-      e.broken = 2.4; e.act = null; e.air = false; e.alpha = 1; cancelHaz(e); e.poise = e.mpoise;
-      msg = { text: 'POSTURA QUEBRADA — ataque!', t: 1.8, col: '#ffd166' }; sfx('parry');
-    }
-  } else {
-    if (!e.d.poise || heavy) {
-      e.stag = heavy ? 0.65 : 0.32; e.st = 'idle'; cancelHaz(e);
-      moveEnt(e, cos(a) * (heavy ? 22 : 10), sin(a) * (heavy ? 22 : 10));
-    }
+  if (e.hp > 0) addPosture(e, poise * (e.isBoss ? 0.7 : 0.8));
+  if (!e.isBoss && e.broken <= 0 && (!e.d.poise || heavy)) {
+    e.stag = heavy ? 0.65 : 0.32; e.st = 'idle'; cancelHaz(e);
+    moveEnt(e, cos(a) * (heavy ? 22 : 10), sin(a) * (heavy ? 22 : 10));
   }
   if (e.hp <= 0) kill(e);
+}
+function postureRegen(e, dt) {
+  e.postT -= dt;
+  if (e.postT <= 0 && e.post > 0) e.post = Math.max(0, e.post - e.mpost * (e.isBoss ? 0.06 : 0.12) * (0.25 + 0.75 * e.hp / e.mhp) * dt);
 }
 function kill(e) {
   e.hp = 0;
@@ -620,6 +696,8 @@ function updEnemy(e, dt) {
   e.flash = Math.max(0, e.flash - dt); e.wob += dt * 3;
   const dx = P.x - e.x, dy = P.y - e.y, d = hyp(dx, dy), a = atan2(dy, dx), D = e.d;
   if (!e.aggro) { if (d < 340 || e.hp < e.mhp) e.aggro = true; else return; }
+  postureRegen(e, dt);
+  if (e.broken > 0) { e.broken -= dt; if (e.broken <= 0) e.post = e.mpost * 0.5; return; }
   if (e.stag > 0) { e.stag -= dt; return; }
   if (P.dead) { e.st = 'idle'; return; }
   e.cd -= dt;
@@ -821,7 +899,8 @@ function updBoss(b, dt) {
   for (const s of b.segs) { const dx = s.x - px, dy = s.y - py, d = hyp(dx, dy), m = b.r * 0.55; if (d > m) { s.x = px + dx / d * m; s.y = py + dy / d * m; } px = s.x; py = s.y; }
   const dx = P.x - b.x, dy = P.y - b.y, d = hyp(dx, dy), a = atan2(dy, dx);
   if (!b.awake) { if (d < 420 || b.hp < b.mhp) wakeBosses(); else return; }
-  if (b.broken > 0) { b.broken -= dt; return; }
+  postureRegen(b, dt);
+  if (b.broken > 0) { b.broken -= dt; if (b.broken <= 0) b.post = b.mpost * 0.4; return; }
   if (!b.p2 && b.hp < b.mhp * 0.5) {
     b.p2 = true; b.sp *= 1.2; b.attacks = b.attacks.concat(b.p2atk); b.act = null; b.air = false; b.alpha = 1; cancelHaz(b);
     sfx('roar'); shake = 14; msg = { text: `${b.title} desperta sua fúria`, t: 2.4, col: '#ff6b6b' };
@@ -1178,7 +1257,9 @@ function drawEnemy(e) {
     const w = e.r * 2.4; ctx.fillStyle = 'rgba(0,0,0,0.6)'; ctx.fillRect(e.x - w / 2, e.y - e.r - 12, w, 4);
     ctx.fillStyle = '#b3202a'; ctx.fillRect(e.x - w / 2, e.y - e.r - 12, w * Math.max(0, e.hp / e.mhp), 4);
   }
-  if (e.stag > 0.3) { ctx.fillStyle = '#ffd166'; for (let i = 0; i < 3; i++) { const a = gtime * 6 + i * 2.1; circle(e.x + cos(a) * e.r, e.y - e.r - 4 + sin(a) * 3, 2); ctx.fill(); } }
+  if (e.broken > 0) deathMark(e.x, e.y - e.r - 14, 7);
+  else if (e.post > 0.3) postBar(e.x, e.y - e.r - 6, e.r * 2.4, e.post / e.mpost);
+  if (e.stag > 0.3 && e.broken <= 0) { ctx.fillStyle = '#ffd166'; for (let i = 0; i < 3; i++) { const a = gtime * 6 + i * 2.1; circle(e.x + cos(a) * e.r, e.y - e.r - 4 + sin(a) * 3, 2); ctx.fill(); } }
 }
 function drawBoss(b) {
   if (b.air) {
@@ -1257,8 +1338,20 @@ function drawBoss(b) {
     }
   }
   drawDeco(D, 'front', f, hx, hy, hr, r, b.col, true);
-  if (b.broken > 0) { ctx.fillStyle = '#ffd166'; for (let i = 0; i < 4; i++) { const a = gtime * 5 + i * TAU / 4; circle(cos(a) * r, -r - 8 + sin(a) * 4, 3.5); ctx.fill(); } }
+  if (b.broken > 0) deathMark(0, -r - 16, 11);
   ctx.restore();
+}
+function deathMark(x, y, s) {
+  const p = 1 + 0.15 * sin(gtime * 10);
+  ctx.save(); ctx.globalAlpha = 1;
+  const g = ctx.createRadialGradient(x, y, 1, x, y, s * 2.4 * p); g.addColorStop(0, 'rgba(255,40,40,0.9)'); g.addColorStop(1, 'rgba(255,0,0,0)');
+  ctx.fillStyle = g; circle(x, y, s * 2.4 * p); ctx.fill();
+  ctx.fillStyle = '#d0101a'; circle(x, y, s * p); ctx.fill(); ctx.strokeStyle = '#fff'; ctx.lineWidth = 1.5; circle(x, y, s * p); ctx.stroke();
+  ctx.restore();
+}
+function postBar(x, y, w, k) {
+  k = clamp(k, 0, 1); ctx.fillStyle = 'rgba(0,0,0,0.55)'; ctx.fillRect(x - w / 2 - 1, y - 1, w + 2, 4);
+  ctx.fillStyle = k > 0.75 ? '#ff8a3a' : '#ffd166'; ctx.fillRect(x - w / 2 * k, y, w * k, 2);
 }
 function drawPlayer() {
   const p = P; if (p.dead && deadT > 0.6) return;
@@ -1295,10 +1388,17 @@ function drawPlayer() {
       ctx.arc(0, 0, a.range, Math.min(s0, s1), Math.max(s0, s1)); ctx.arc(0, 0, a.range * 0.45, Math.max(s0, s1), Math.min(s0, s1), true); ctx.fill();
     }
   }
+  if (a && a.type === 'guard') wa = f - 0.15;
   if (a && a.type === 'heal') { ctx.fillStyle = `rgba(255,179,71,${0.3 + 0.3 * sin(gtime * 20)})`; circle(0, 0, 22); ctx.fill(); wa = f + 1.6; }
   ctx.strokeStyle = '#d8d8e8'; ctx.lineWidth = 3; ctx.lineCap = 'round'; ctx.beginPath(); ctx.moveTo(cos(wa) * 8, sin(wa) * 8); ctx.lineTo(cos(wa) * len, sin(wa) * len); ctx.stroke();
   ctx.strokeStyle = '#7a6a4a'; ctx.lineWidth = 4; ctx.beginPath(); ctx.moveTo(cos(wa) * 8 - sin(wa) * 4, sin(wa) * 8 + cos(wa) * 4); ctx.lineTo(cos(wa) * 8 + sin(wa) * 4, sin(wa) * 8 - cos(wa) * 4); ctx.stroke();
+  if (a && a.type === 'guard') {
+    const perfect = a.t <= a.win;
+    ctx.strokeStyle = perfect ? 'rgba(255,230,140,0.95)' : 'rgba(200,210,230,0.7)'; ctx.lineWidth = perfect ? 4 : 3;
+    ctx.beginPath(); ctx.arc(0, 0, 21, f - 1.0, f + 1.0); ctx.stroke();
+  }
   ctx.restore();
+  if (!p.dead && p.post > 1) postBar(p.x, p.y - 26, 40, p.post / maxPost());
 }
 function drawProj() {
   for (const p of projs) {
@@ -1367,7 +1467,7 @@ function drawHUD() {
     const bw = TOUCH ? Math.min(W * 0.4, 420) : Math.min(W * 0.62, 560), bx = (W - bw) / 2, by = TOUCH ? 62 + i * 34 : H - 34 - (bl.length - 1 - i) * 36;
     txt(b.name + (b.p2 ? ' ✦' : ''), bx, by - 11, 13, '#e8d9b0');
     bar(bx, by, bw, 9, b.hp / b.mhp, null, b.p2 ? '#c0392b' : '#8e1b22');
-    ctx.fillStyle = '#ffd166'; ctx.fillRect(bx, by + 11, bw * clamp(1 - b.poise / b.mpoise, 0, 1), 2);
+    { const k = clamp(b.post / b.mpost, 0, 1); ctx.fillStyle = 'rgba(0,0,0,0.6)'; ctx.fillRect(bx + bw * 0.2, by + 12, bw * 0.6, 5); ctx.fillStyle = b.broken > 0 ? '#ff4a4a' : k > 0.75 ? '#ff8a3a' : '#ffd166'; ctx.fillRect(bx + bw / 2 - bw * 0.3 * k, by + 13, bw * 0.6 * k, 3); }
   });
   // alvo travado
   if (lockT) {
@@ -1380,7 +1480,7 @@ function drawHUD() {
 }
 function drawControls() {
   if (!TOUCH) {
-    txt('WASD mover · J ataque · K forte · Espaço rolar · E curar · Q mira · Esc pausa', W / 2, H - 12, 11, 'rgba(200,190,170,0.55)', 'center');
+    txt('WASD mover · J ataque · K forte · I/C defesa (aparar) · Espaço rolar · E curar · Q mira · Esc pausa', W / 2, H - 12, 11, 'rgba(200,190,170,0.55)', 'center');
     return;
   }
   if (joy.id !== null) {
@@ -1448,16 +1548,18 @@ function drawHelp() {
     ['Lado esquerdo da tela: arraste para mover.', '#cfc3a6', 14],
     ['ATAQUE: golpe rápido (combo de 3). FORTE: golpe pesado que quebra postura.', '#cfc3a6', 14],
     ['ROLAR: esquiva com invencibilidade — role ATRAVÉS dos ataques. CURA: bebe um frasco de Brasa.', '#cfc3a6', 14],
-    ['MIRA: trava o alvo mais próximo. Tudo consome estamina (barra verde).', '#cfc3a6', 14],
-    ['Áreas vermelhas mostram onde o golpe vai cair — saia ou role antes de encher.', '#ff8a80', 14],
+    ['MIRA: trava o alvo mais próximo. Ataques e rolamentos consomem estamina (barra verde).', '#cfc3a6', 14],
+    ['DEFESA: toque no momento exato do golpe para APARAR (sem dano). Segure para bloquear.', '#ffd166', 14],
+    ['Áreas DOURADAS podem ser aparadas. Áreas VERMELHAS (危) não — role para fora delas.', '#ffd166', 14],
+    ['Aparar enche a POSTURA do inimigo. Quando ela quebra, um ponto vermelho surge: GOLPE FATAL!', '#ff8a80', 14],
     ['Viaje por 8 reinos míticos: Grego, Nórdico, Egípcio, Japonês, Asteca, Folclore Brasileiro, Inferno e Eslavo.', '#ffd166', 14],
     ['Cada reino tem 3 fases e termina num chefe lendário. Derrote todos os inimigos para abrir o portal.', '#cfc3a6', 14],
-    ['Chefes mudam de fase com 50% de vida. Quebre a postura (barra amarela) para dano crítico.', '#cfc3a6', 14],
+    ['Chefes mudam de fase com 50% de vida. Ao entrar em fúria ficam mais rápidos e ganham golpes novos.', '#cfc3a6', 14],
     ['Ao morrer você perde as almas, mas pode recuperá-las no local da morte.', '#9fe7c9', 14],
     ['Na fogueira, gaste almas em Vigor, Fôlego e Força. As fases são infinitas.', '#cfc3a6', 14],
   ];
-  let y = H * 0.12; const sc = Math.min(1, W / 900);
-  for (const [s, c, z] of lines) { txt(s, W / 2, y, z * (z > 20 ? 1 : sc), c, 'center'); y += z > 20 ? 40 : 27; }
+  const lh = Math.min(27, (H - 110) / lines.length); let y = Math.max(24, H * 0.06); const sc = Math.min(1, W / 900, lh / 20);
+  for (const [s, c, z] of lines) { txt(s, W / 2, y, z * (z > 20 ? Math.min(1, lh / 22) : sc), c, 'center'); y += z > 20 ? lh * 1.4 : lh; }
   const bw = 200; button((W - bw) / 2, Math.min(y + 10, H - 60), bw, 42, 'Voltar', () => { menuPage = 'main'; });
 }
 function drawBonfire() {
@@ -1529,6 +1631,13 @@ function draw() {
   const ents = [...enemies.map(e => [e.y, () => drawEnemy(e)]), ...bosses.map(b => [b.y, () => drawBoss(b)]), [P.y, drawPlayer]];
   ents.sort((a, b) => a[0] - b[0]); for (const e of ents) e[1]();
   drawProj(); drawParts(false);
+  const peril = new Set();
+  for (const h of hazards) if (!h.blk && h.owner && h.owner.hp > 0 && h.t < h.delay && !h.owner.air) peril.add(h.owner);
+  for (const o of peril) {
+    const y = o.y - o.r - (o.isBoss ? 34 : 22), k = 0.85 + 0.15 * sin(gtime * 14);
+    ctx.fillStyle = 'rgba(160,0,10,0.85)'; circle(o.x, y, 11 * k); ctx.fill(); ctx.strokeStyle = '#ffb0a0'; ctx.lineWidth = 1.5; ctx.stroke();
+    ctx.font = `bold ${Math.round(13 * k)}px sans-serif`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillStyle = '#fff'; ctx.fillText('危', o.x, y + 1);
+  }
   for (const f of floats) { ctx.globalAlpha = clamp(f.life * 1.5, 0, 1); ctx.font = `bold ${f.sz}px Georgia, serif`; ctx.textAlign = 'center'; ctx.fillStyle = '#000'; ctx.fillText(f.txt, f.x + 1, f.y + 1); ctx.fillStyle = f.col; ctx.fillText(f.txt, f.x, f.y); }
   ctx.globalAlpha = 1;
   // luz/vinheta
@@ -1557,7 +1666,7 @@ document.addEventListener('visibilitychange', () => { if (document.hidden) windo
 
 /* depuração (testes automatizados) */
 window.__game = { get state() { return state; }, get S() { return S; }, get P() { return P; }, get bosses() { return bosses; }, get enemies() { return enemies; }, get world() { return world; },
-  start(n) { P = newPlayer(); buildStage(n); state = 'play'; }, god() { P.hp = 1e9; }, ATK,
+  start(n) { P = newPlayer(); buildStage(n); state = 'play'; }, god() { P.hp = 1e9; }, ATK, STATS, get hazards() { return hazards; }, get projs() { return projs; },
   step(n, fn) { for (let i = 0; i < n; i++) { if (fn) fn(); update(1 / 60); } draw(); }, act, keys };
 
 let last = performance.now();

@@ -6,6 +6,9 @@ Soulslike 2D (visão de cima) para Android, com **fases infinitas** e **chefes v
 
 ## O jogo
 - Combate soulslike: ataque leve (combo de 3), ataque forte, rolamento com invencibilidade, estamina, frascos de cura, trava de mira.
+- **Aparar estilo Sekiro**: toque DEFESA no instante do golpe para aparar (sem dano, faísca dourada) ou segure para bloquear (dano mínimo, mas enche sua postura). Apertar sem parar encurta a janela de aparo.
+- **Postura**: aparar e golpear enchem a postura do inimigo (barra amarela). Quando ela quebra, aparece um ponto vermelho: o próximo ataque é um **golpe fatal** (mata inimigos comuns; tira 30% da vida de chefes). Se a sua postura encher de tanto bloquear, você fica atordoado.
+- Telegrafias **douradas** podem ser aparadas (golpes, investidas, projéteis); **vermelhas** com o símbolo 危 não (impactos no chão, varreduras, fogo, raios) — role para fora.
 - Ataques inimigos são telegrafados por áreas vermelhas que se enchem — role através deles ou saia da área.
 - **8 reinos mitológicos** em ciclo infinito, cada um com cenário, obstáculos, inimigos e chefes próprios:
 
@@ -21,11 +24,11 @@ Soulslike 2D (visão de cima) para Android, com **fases infinitas** e **chefes v
 | Eslavo — Floresta de Nav | Upyr, Volkolak, Bogatyr Caído, Rusalka, Leshy | Koschei, Baba Yaga, Zmei Gorynych |
 
 - Cada reino tem 3 fases; a terceira é o covil do chefe. A cada volta completa, o reino traz um chefe diferente, e depois que todos aparecem eles retornam com títulos (Ancestral, Renascido…), cores, ataques extras e modificadores (Colossal, Veloz, Ardente, Sombrio, Gêmeos).
-- Chefes entram em fúria com 50% de vida; quebre a postura deles para causar dano crítico.
+- Chefes entram em fúria com 50% de vida.
 - Almas: gaste na fogueira em Vigor, Fôlego e Força. Ao morrer, você as perde, mas pode recuperá-las no local da morte.
 - O progresso é salvo automaticamente.
 
-Controles no PC (testar no navegador abrindo `web/index.html`): WASD mover, J ataque, K forte, Espaço rolar, E curar, Q mira, Esc pausa.
+Controles no PC (testar no navegador abrindo `web/index.html`): WASD mover, J ataque, K forte, I ou C defesa/aparar, Espaço rolar, E curar, Q mira, Esc pausa.
 
 ## Compilar
 ```
