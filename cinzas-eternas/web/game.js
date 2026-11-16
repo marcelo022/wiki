@@ -75,16 +75,88 @@ const flaskMax = () => Math.min(3 + Math.floor(S.bosses / 2), 8);
 const level = () => 1 + S.vit + S.end + S.str, lvlCost = () => Math.round(60 * Math.pow(level(), 1.4));
 
 /* ---------- dados do mundo ---------- */
-const BIOMES = [
-  { name: 'Catacumbas Esquecidas', floor: '#1c1a20', tile: '#25232b', line: '#2f2c36', accent: '#8a73c0', obs: '#3a3644', obsTop: '#4e4959' },
-  { name: 'Floresta Apodrecida', floor: '#141b13', tile: '#1b2519', line: '#22301f', accent: '#7fae4f', obs: '#2c2418', obsTop: '#3d6b2a' },
-  { name: 'Cidadela Rachada', floor: '#221b16', tile: '#2b231c', line: '#352b22', accent: '#d08a3a', obs: '#4a3d33', obsTop: '#62523f' },
-  { name: 'Lago de Cinzas', floor: '#191c22', tile: '#20242c', line: '#292e38', accent: '#8fb6d8', obs: '#363c48', obsTop: '#4a5262' },
-  { name: 'Abismo Carmesim', floor: '#1f1012', tile: '#2a1518', line: '#351a1e', accent: '#e04a3a', obs: '#3e1e22', obsTop: '#5a2a2e' },
-  { name: 'Tundra Silenciosa', floor: '#23272c', tile: '#2c3137', line: '#363c43', accent: '#dfeaf5', obs: '#4a525c', obsTop: '#7f8a96' },
-  { name: 'Templo Afogado', floor: '#0f1c1d', tile: '#142627', line: '#1b3132', accent: '#4fd1c5', obs: '#20393a', obsTop: '#2f5455' },
-  { name: 'Forja dos Reis Mortos', floor: '#1d1712', tile: '#271e17', line: '#33271d', accent: '#ffb347', obs: '#3b2c20', obsTop: '#6b4a2c' },
+/* ---------- reinos mitológicos ----------
+   Cada reino = 3 fases (2 normais + 1 chefe). Os inimigos usam as mesmas IAs-base
+   (hollow, hound, archer, knight, caster, brute) com nome e aparência do mito. */
+const B_ = (name, epi, shape, o) => Object.assign({ name, epi, shape, r: 28, hp: 640, pref: 110, col: '#888', col2: '#f33', attacks: ['combo'], p2: ['roar'], minion: 'hollow', deco: {} }, o);
+const REALMS = [
+  { myth: 'Mitologia Grega', name: 'Labirinto de Creta', floor: '#1e1c19', tile: '#28251f', line: '#332f27', accent: '#e0c27a', obs: '#5a554b', obsTop: '#cfc6b0', obsKind: ['column', 'column', 'pillar'],
+    skins: { hollow: { name: 'Hoplita Esqueleto', col: '#cfc6b0', deco: ['bones', 'helm'] }, hound: { name: 'Harpia', col: '#8a6a4a', deco: ['wings'] },
+      archer: { name: 'Sátiro Arqueiro', col: '#7a5a3a', deco: ['horns'] }, knight: { name: 'Guardião de Bronze', col: '#b08d57', deco: ['helm'] },
+      caster: { name: 'Lâmia', col: '#5a7a5a', deco: ['snakes'] }, brute: { name: 'Ciclope', col: '#9a8a76', deco: ['oneEye'] } },
+    bosses: [
+      B_('Minotauro', 'Senhor do Labirinto', 'beast', { r: 34, hp: 640, pref: 100, col: '#5e3b2a', col2: '#e04a3a', attacks: ['charge', 'combo', 'pounce', 'cleave'], p2: ['roar'], deco: { horns: 1 } }),
+      B_('Medusa', 'O Olhar que Petrifica', 'witch', { r: 25, hp: 540, pref: 280, col: '#3f6b4a', col2: '#b8ff9a', attacks: ['beam', 'volley', 'teleport', 'spiral'], p2: ['summon'], deco: { snakes: 1 } }),
+      B_('Hidra de Lerna', 'A de Muitas Cabeças', 'wyrm', { r: 30, hp: 780, pref: 170, col: '#2f5a4a', col2: '#c9ff5a', attacks: ['breath', 'volley', 'sweep', 'spikes'], p2: ['meteor'], minion: 'hound', deco: { heads: 5 } }),
+      B_('Cérbero', 'Cão de Guarda do Submundo', 'beast', { r: 36, hp: 700, pref: 110, col: '#2a2226', col2: '#ff6a2a', attacks: ['pounce', 'breath', 'sweep', 'charge'], p2: ['roar'], minion: 'hound', deco: { heads: 3, flame: 1 } }),
+    ] },
+  { myth: 'Mitologia Nórdica', name: 'Helheim Congelado', floor: '#1f2429', tile: '#283039', line: '#323b45', accent: '#bfe3ff', obs: '#3d4752', obsTop: '#8fa3b5', obsKind: ['rune', 'rune', 'pillar'],
+    skins: { hollow: { name: 'Draugr', col: '#7d8a8a', deco: ['bones'] }, hound: { name: 'Lobo Warg', col: '#5d5f66', deco: [] },
+      archer: { name: 'Arqueiro Draugr', col: '#6a7a78', deco: ['bones'] }, knight: { name: 'Einherjar Caído', col: '#8a929c', deco: ['helm', 'horns'] },
+      caster: { name: 'Völva Sombria', col: '#4a4f7a', deco: ['hood'] }, brute: { name: 'Jötunn de Gelo', col: '#8fb6d8', deco: ['oneEye'] } },
+    bosses: [
+      B_('Fenrir', 'O Lobo Acorrentado', 'beast', { r: 36, hp: 680, pref: 100, col: '#4a4c55', col2: '#ffd166', attacks: ['pounce', 'charge', 'sweep', 'combo'], p2: ['roar'], minion: 'hound', deco: { chains: 1 } }),
+      B_('Surtr', 'O Gigante de Muspelheim', 'golem', { r: 44, hp: 960, pref: 130, col: '#4a2a1a', col2: '#ff8c3a', attacks: ['slam', 'shockwave', 'meteor', 'breath'], p2: ['spikes'], deco: { flame: 1, horns: 1 } }),
+      B_('Jörmungandr', 'A Serpente do Mundo', 'wyrm', { r: 34, hp: 820, pref: 170, col: '#2f4f5f', col2: '#7fffd4', attacks: ['charge', 'sweep', 'volley', 'spikes'], p2: ['breath'], minion: 'hound', deco: {} }),
+    ] },
+  { myth: 'Mitologia Egípcia', name: 'Duat, o Mundo dos Mortos', floor: '#2a2217', tile: '#33291b', line: '#3d3120', accent: '#ffd36b', obs: '#7a6440', obsTop: '#d9b36a', obsKind: ['obelisk', 'obelisk', 'pillar'],
+    skins: { hollow: { name: 'Múmia', col: '#cbbf9a', deco: ['wraps'] }, hound: { name: 'Chacal do Deserto', col: '#a07a4a', deco: ['ears'] },
+      archer: { name: 'Arqueiro Mumificado', col: '#b8a77e', deco: ['wraps'] }, knight: { name: 'Guarda da Tumba', col: '#3a5a7a', deco: ['nemes'] },
+      caster: { name: 'Sacerdote Amaldiçoado', col: '#6a4a2a', deco: ['nemes'] }, brute: { name: 'Escorpião Gigante', col: '#5a3a1a', deco: ['pincers'] } },
+    bosses: [
+      B_('Apep', 'A Serpente do Caos', 'wyrm', { r: 32, hp: 800, pref: 170, col: '#3a2a4a', col2: '#c77dff', attacks: ['breath', 'charge', 'spikes', 'spiral'], p2: ['meteor'], minion: 'hound', deco: {} }),
+      B_('Ammit', 'A Devoradora de Corações', 'beast', { r: 34, hp: 700, pref: 100, col: '#4a6a3a', col2: '#ffd36b', attacks: ['pounce', 'combo', 'sweep', 'roar'], p2: ['charge'], minion: 'hound', deco: { mane: 1 } }),
+      B_('Esfinge', 'Guardiã dos Enigmas', 'golem', { r: 42, hp: 900, pref: 140, col: '#b08d57', col2: '#7fd4ff', attacks: ['beam', 'slam', 'meteor', 'shockwave'], p2: ['summon'], deco: { nemes: 1 } }),
+    ] },
+  { myth: 'Mitologia Japonesa', name: 'Yomi, a Terra das Trevas', floor: '#18141a', tile: '#211b24', line: '#2b232f', accent: '#ff5a6a', obs: '#3a3238', obsTop: '#8a7a80', obsKind: ['lantern', 'lantern', 'pillar'],
+    skins: { hollow: { name: 'Gaki Faminto', col: '#8a9a8a', deco: ['ghost'] }, hound: { name: 'Kitsune Selvagem', col: '#d0803a', deco: ['ears', 'tails'] },
+      archer: { name: 'Tengu Arqueiro', col: '#a03a2a', deco: ['beak', 'wings'] }, knight: { name: 'Samurai Amaldiçoado', col: '#5a2a2a', deco: ['kabuto'] },
+      caster: { name: 'Onmyōji Corrompido', col: '#3a3a5a', deco: ['hood'] }, brute: { name: 'Oni', col: '#b03a3a', deco: ['horns'] } },
+    bosses: [
+      B_('Yamata no Orochi', 'A Serpente de Oito Cabeças', 'wyrm', { r: 34, hp: 840, pref: 170, col: '#3a2a2a', col2: '#ff5a3a', attacks: ['breath', 'volley', 'sweep', 'charge'], p2: ['spikes'], minion: 'hound', deco: { heads: 7 } }),
+      B_('Gashadokuro', 'O Esqueleto Colossal', 'golem', { r: 46, hp: 980, pref: 130, col: '#d8d0c0', col2: '#7fd4ff', attacks: ['slam', 'sweep', 'spikes', 'shockwave'], p2: ['summon'], deco: { skull: 1 } }),
+      B_('Kyūbi no Kitsune', 'A Raposa de Nove Caudas', 'witch', { r: 26, hp: 580, pref: 260, col: '#e8a04a', col2: '#9fe3ff', attacks: ['teleport', 'spiral', 'meteor', 'volley'], p2: ['dashslash'], minion: 'hound', deco: { tails: 9, ears: 1 } }),
+    ] },
+  { myth: 'Mitologia Asteca', name: 'Mictlān, a Terra dos Mortos', floor: '#1d1a14', tile: '#27231a', line: '#312b20', accent: '#3fd1a0', obs: '#4a4436', obsTop: '#8a7a5a', obsKind: ['stepped', 'stepped', 'pillar'],
+    skins: { hollow: { name: 'Guerreiro Jaguar Morto', col: '#c89a3a', deco: ['bones', 'spots'] }, hound: { name: 'Ahuizotl', col: '#3a4a5a', deco: [] },
+      archer: { name: 'Atirador de Atlatl', col: '#8a5a3a', deco: ['feathers'] }, knight: { name: 'Guerreiro Águia Caído', col: '#6a5040', deco: ['wings', 'feathers'] },
+      caster: { name: 'Tzitzimitl', col: '#2a2a3a', deco: ['skull'] }, brute: { name: 'Guardião de Obsidiana', col: '#2a2a2e', deco: ['oneEye'] } },
+    bosses: [
+      B_('Cipactli', 'O Crocodilo Primordial', 'beast', { r: 38, hp: 760, pref: 110, col: '#3a5a3a', col2: '#3fd1a0', attacks: ['charge', 'pounce', 'sweep', 'combo'], p2: ['spikes'], minion: 'hound', deco: { jaws: 1 } }),
+      B_('Rainha Tzitzimitl', 'Devoradora de Estrelas', 'witch', { r: 26, hp: 580, pref: 280, col: '#1f1f2e', col2: '#ffe08a', attacks: ['meteor', 'spiral', 'teleport', 'summon'], p2: ['beam'], deco: { skull: 1, wings: 1 } }),
+      B_('Guardião do Mictlān', 'Senhor dos Nove Rios', 'knight', { r: 30, hp: 700, pref: 100, col: '#d8d0c0', col2: '#3fd1a0', attacks: ['combo', 'leap', 'cleave', 'spikes'], p2: ['shockwave'], deco: { skull: 1, feathers: 1 } }),
+    ] },
+  { myth: 'Folclore Brasileiro', name: 'Mata Encantada', floor: '#111a10', tile: '#172416', line: '#1e2f1c', accent: '#ff7a2a', obs: '#3a2a1a', obsTop: '#2f5a2a', obsKind: ['tree', 'tree', 'tree', 'pillar'],
+    skins: { hollow: { name: 'Corpo-Seco', col: '#7a6a4a', deco: ['bones'] }, hound: { name: 'Mula sem Cabeça', col: '#4a3020', deco: ['headless'] },
+      archer: { name: 'Caçador Assombrado', col: '#4a5a3a', deco: ['hat'] }, knight: { name: 'Capelobo', col: '#4a3a3a', deco: ['snout'] },
+      caster: { name: 'Saci', col: '#3a2a20', deco: ['redcap'] }, brute: { name: 'Lobisomem', col: '#5a4a3a', deco: ['ears'] } },
+    bosses: [
+      B_('Boitatá', 'A Cobra de Fogo', 'wyrm', { r: 32, hp: 800, pref: 170, col: '#ff6a1a', col2: '#fff1a0', attacks: ['breath', 'charge', 'sweep', 'spiral'], p2: ['meteor'], minion: 'hound', deco: { flame: 1 } }),
+      B_('Mapinguari', 'O Gigante da Floresta', 'golem', { r: 44, hp: 960, pref: 120, col: '#4a3a2a', col2: '#ff4a3a', attacks: ['slam', 'roar', 'sweep', 'leap'], p2: ['shockwave'], deco: { oneEye: 1, bellyMouth: 1 } }),
+      B_('Cuca', 'A Bruxa-Jacaré', 'witch', { r: 26, hp: 600, pref: 260, col: '#3a6a2a', col2: '#d6ff6a', attacks: ['volley', 'meteor', 'summon', 'spiral'], p2: ['teleport'], deco: { jaws: 1 } }),
+      B_('Curupira', 'Guardião da Mata', 'duelist', { r: 22, hp: 540, pref: 110, col: '#3a6a3a', col2: '#ff6a1a', attacks: ['dashslash', 'teleport', 'combo', 'spikes'], p2: ['meteor'], minion: 'hound', deco: { flame: 1 } }),
+    ] },
+  { myth: 'Demonologia e Inferno', name: 'Círculos do Inferno', floor: '#1f0e0e', tile: '#2a1414', line: '#361a1a', accent: '#ff3a2a', obs: '#2a1414', obsTop: '#5a2a22', obsKind: ['brazier', 'pillar', 'brazier'],
+    skins: { hollow: { name: 'Condenado', col: '#7a5a5a', deco: [] }, hound: { name: 'Diabrete', col: '#a03a2a', deco: ['horns', 'wings'] },
+      archer: { name: 'Demônio Arqueiro', col: '#6a2a2a', deco: ['horns'] }, knight: { name: 'Cavaleiro Infernal', col: '#3a2a2a', deco: ['helm', 'horns'] },
+      caster: { name: 'Feiticeiro Infernal', col: '#5a1a3a', deco: ['hood'] }, brute: { name: 'Demônio de Fogo', col: '#a0401a', deco: ['horns', 'flame'] } },
+    bosses: [
+      B_('Anjo Caído', 'O Arauto Banido', 'knight', { r: 28, hp: 680, pref: 100, col: '#cfc6b0', col2: '#ffd166', attacks: ['combo', 'leap', 'beam', 'charge'], p2: ['meteor'], deco: { wings: 1, halo: 1 } }),
+      B_('Leviatã', 'A Serpente dos Abismos', 'wyrm', { r: 36, hp: 860, pref: 180, col: '#1f3a5a', col2: '#6ad1ff', attacks: ['charge', 'breath', 'sweep', 'volley'], p2: ['spikes'], minion: 'hound', deco: {} }),
+      B_('Beemote', 'A Besta Primordial', 'golem', { r: 46, hp: 1000, pref: 120, col: '#4a2a1a', col2: '#ff5a2a', attacks: ['slam', 'charge', 'shockwave', 'roar'], p2: ['meteor'], deco: { horns: 1 } }),
+    ] },
+  { myth: 'Mitologia Eslava', name: 'Floresta de Nav', floor: '#161818', tile: '#1d2120', line: '#252a29', accent: '#b0a0ff', obs: '#d8d4c8', obsTop: '#2a3a2a', obsKind: ['birch', 'birch', 'tree'],
+    skins: { hollow: { name: 'Upyr', col: '#9a9aa0', deco: ['fangs'] }, hound: { name: 'Volkolak', col: '#4a4a50', deco: ['ears'] },
+      archer: { name: 'Arqueiro Morto', col: '#6a6a5a', deco: ['bones'] }, knight: { name: 'Bogatyr Caído', col: '#7a7a8a', deco: ['helm'] },
+      caster: { name: 'Rusalka', col: '#6aa0a0', deco: ['ghost'] }, brute: { name: 'Leshy', col: '#4a5a3a', deco: ['horns'] } },
+    bosses: [
+      B_('Koschei', 'O Imortal', 'knight', { r: 28, hp: 700, pref: 100, col: '#5a5a6a', col2: '#9fffb0', attacks: ['combo', 'charge', 'summon', 'leap'], p2: ['shockwave'], deco: { skull: 1, crown: 1 } }),
+      B_('Baba Yaga', 'A Senhora da Cabana', 'witch', { r: 25, hp: 600, pref: 270, col: '#4a3a2a', col2: '#b0a0ff', attacks: ['meteor', 'volley', 'teleport', 'spikes'], p2: ['summon'], deco: {} }),
+      B_('Zmei Gorynych', 'O Dragão de Três Cabeças', 'wyrm', { r: 34, hp: 840, pref: 170, col: '#2f4a2f', col2: '#ffae3a', attacks: ['breath', 'charge', 'meteor', 'sweep'], p2: ['volley'], minion: 'hound', deco: { heads: 3, wings: 1 } }),
+    ] },
 ];
+const BIOMES = REALMS;
+const realmOf = n => REALMS[Math.floor((n - 1) / 3) % REALMS.length];
 const ETYPES = {
   hollow: { name: 'Morto-vivo', r: 13, hp: 42, spd: 72, dmg: 14, range: 34, wind: 0.55, cd: 1.4, col: '#8a8070', souls: 15, kind: 'melee' },
   hound: { name: 'Cão Pútrido', r: 11, hp: 28, spd: 155, dmg: 11, range: 120, wind: 0.42, cd: 1.3, col: '#6e4b36', souls: 18, kind: 'lunge' },
@@ -174,21 +246,20 @@ function newPlayer() {
 function buildStage(n) {
   const rng = mulberry32(n * 7919 + 13);
   const isBoss = n % 3 === 0;
-  const bi = Math.floor((n - 1) / 3) % BIOMES.length;
-  const w = isBoss ? 1150 : 1250 + Math.min(n * 45, 950), h = isBoss ? 980 : 1000 + Math.min(n * 35, 700);
-  world = { n, w, h, isBoss, biome: BIOMES[bi], obs: [], exit: { x: w / 2, y: 56, r: 40 }, open: false, stain: null, decals: [] };
+    const w = isBoss ? 1150 : 1250 + Math.min(n * 45, 950), h = isBoss ? 980 : 1000 + Math.min(n * 35, 700);
+  world = { n, w, h, isBoss, biome: realmOf(n), obs: [], exit: { x: w / 2, y: 56, r: 40 }, open: false, stain: null, decals: [] };
   enemies = []; bosses = []; projs = []; hazards = []; floats = []; parts = parts.filter(p => p.type === 'ember');
   lockT = null; stageT = 0; victoryT = 0;
   if (isBoss) {
     const cx = w / 2, cy = h / 2 - 20;
-    for (let i = 0; i < 4; i++) { const a = PI / 4 + i * PI / 2; world.obs.push({ x: cx + cos(a) * 330, y: cy + sin(a) * 260, r: 32 }); }
+    for (let i = 0; i < 4; i++) { const a = PI / 4 + i * PI / 2; world.obs.push({ x: cx + cos(a) * 330, y: cy + sin(a) * 260, r: 32, kind: world.biome.obsKind[0], ph: i }); }
   } else {
     const cnt = Math.min(6 + Math.floor(n / 2), 22); let tries = 0;
     while (world.obs.length < cnt && tries++ < 600) {
       const r = 22 + rng() * 42, x = 80 + rng() * (w - 160), y = 150 + rng() * (h - 320);
       if (hyp(x - w / 2, y - (h - 90)) < 170 || hyp(x - w / 2, y - 56) < 130) continue;
       if (world.obs.some(o => hyp(o.x - x, o.y - y) < o.r + r + 75)) continue;
-      world.obs.push({ x, y, r, kind: rng() < 0.25 ? 'grave' : 'pillar' });
+      world.obs.push({ x, y, r, kind: pick(world.biome.obsKind, rng), ph: rng() * TAU });
     }
     const cntE = Math.min(3 + Math.floor(n * 0.85), 18);
     const pool = ['hollow', 'hollow', 'hollow'];
@@ -206,61 +277,52 @@ function buildStage(n) {
   if (!P) P = newPlayer();
   P.x = w / 2; P.y = h - 90; P.face = -PI / 2; P.act = null; P.stag = 0; P.buf = null;
   cam.x = P.x - W / SC / 2; cam.y = P.y - H / SC / 2;
-  banner = { text: isBoss ? 'Arena do Senhor' : `Fase ${n}`, sub: world.biome.name, t: 3.2, col: '#e8d9b0' };
+  banner = { text: isBoss ? `Fase ${n} · Covil do Chefe` : `Fase ${n}`, sub: `${world.biome.name} — ${world.biome.myth}`, t: 3.2, col: '#e8d9b0' };
   S.stage = n; S.started = true; S.best = Math.max(S.best, n); persist();
+}
+function skinOf(type) {
+  const sk = (world && world.biome.skins[type]) || { name: ETYPES[type].name, col: ETYPES[type].col, deco: [] };
+  const deco = {}; for (const k of sk.deco) deco[k] = k === 'tails' ? 2 : 1;
+  return { name: sk.name, col: sk.col, deco };
 }
 function makeEnemy(type, x, y, n, minion) {
   const d = ETYPES[type], hf = 1 + (n - 1) * 0.13, df = 1 + (n - 1) * 0.07;
   return { type, d, x, y, r: d.r, hp: d.hp * hf, mhp: d.hp * hf, dmg: d.dmg * df, spd: d.spd * (1 + Math.min(n * 0.01, 0.3)),
     st: 'idle', t: 0, cd: rnd(0.3, 1.2), face: PI / 2, stag: 0, aggro: !!minion, souls: minion ? 5 : Math.round(d.souls * (1 + (n - 1) * 0.3)),
-    flash: 0, minion: !!minion, wob: R() * TAU, broken: 0 };
+    flash: 0, minion: !!minion, wob: R() * TAU, broken: 0, ...skinOf(type) };
 }
 
 /* ---------- chefes ---------- */
-const NAMES1 = ['Mor', 'Val', 'Ash', 'Kra', 'Zul', 'Ve', 'Thal', 'Gor', 'Ny', 'Esk', 'Dra', 'Ul', 'Sar', 'Ix', 'Bel', 'Oro', 'Hal', 'Quer', 'Ish', 'Ruv'];
-const NAMES2 = ['vak', 'dris', 'gon', 'eth', 'mir', 'ros', 'kar', 'nyx', 'oth', 'ael', 'zun', 'grim', 'vel', 'thos', 'mur', 'ras', 'dun', 'ira'];
-const EPI = ['Devorador de Cinzas', 'Chama sem Luz', 'Guardião do Abismo', 'Eterno Faminto', 'Senhor das Correntes', 'Arauto da Ruína', 'Tecelão de Ossos',
-  'Lâmina Esquecida', 'Coração de Brasa', 'Sombra Primeva', 'Juramento Partido', 'Rei sem Coroa', 'Sentinela Profana', 'Olhar do Vazio', 'Fome Antiga', 'Último dos Juízes'];
-const BOSSARCH = [
-  { id: 'knight', title: 'Cavaleiro', shape: 'knight', r: 28, hp: 640, pref: 90, col: '#a9b0b8', col2: '#5b2a2a', attacks: ['combo', 'charge', 'cleave', 'leap'], p2: ['shockwave'], minion: 'hollow' },
-  { id: 'witch', title: 'Bruxa', shape: 'witch', r: 24, hp: 500, pref: 280, col: '#7b3fa0', col2: '#d6a2ff', attacks: ['volley', 'meteor', 'teleport', 'spiral'], p2: ['summon'], minion: 'hollow' },
-  { id: 'beast', title: 'Fera', shape: 'beast', r: 34, hp: 620, pref: 100, col: '#5e3b2a', col2: '#e04a3a', attacks: ['pounce', 'combo', 'sweep', 'charge'], p2: ['roar'], minion: 'hound' },
-  { id: 'necro', title: 'Necromante', shape: 'witch', r: 24, hp: 540, pref: 300, col: '#2f4a3a', col2: '#9effa8', attacks: ['summon', 'spikes', 'volley', 'meteor'], p2: ['spiral'], minion: 'hollow' },
-  { id: 'golem', title: 'Colosso', shape: 'golem', r: 42, hp: 920, pref: 120, col: '#6b6259', col2: '#ff8c3a', attacks: ['slam', 'shockwave', 'spikes', 'sweep'], p2: ['meteor'], minion: 'hollow' },
-  { id: 'wyrm', title: 'Serpe', shape: 'wyrm', r: 30, hp: 760, pref: 170, col: '#3d6b4f', col2: '#ffcf5a', attacks: ['breath', 'sweep', 'charge', 'volley'], p2: ['meteor'], minion: 'hound' },
-  { id: 'eye', title: 'Olho', shape: 'eye', r: 32, hp: 560, pref: 300, col: '#d8c8b8', col2: '#c0392b', attacks: ['beam', 'spiral', 'volley', 'teleport'], p2: ['summon'], minion: 'hound' },
-  { id: 'duelist', title: 'Duelista', shape: 'duelist', r: 22, hp: 520, pref: 110, col: '#3a3a52', col2: '#7fd4ff', attacks: ['dashslash', 'combo', 'teleport', 'volley'], p2: ['spikes'], minion: 'hollow' },
-  { id: 'queen', title: 'Rainha-Aranha', shape: 'spider', r: 34, hp: 700, pref: 200, col: '#2a1f2e', col2: '#b3ff3a', attacks: ['pounce', 'spikes', 'summon', 'volley'], p2: ['breath'], minion: 'hound' },
-];
 const ALL_ATK = ['combo', 'cleave', 'charge', 'slam', 'shockwave', 'leap', 'volley', 'spiral', 'meteor', 'teleport', 'summon', 'sweep', 'pounce', 'roar', 'spikes', 'breath', 'beam', 'dashslash'];
 const ATK_NAME_DESC = {};
 const HUES = [['#a9b0b8', '#5b2a2a'], ['#7b3fa0', '#d6a2ff'], ['#b84a3a', '#ffd27a'], ['#3a6b8f', '#9fe3ff'], ['#4a4a4a', '#ff3a5c'], ['#c9b26b', '#fff1b8'], ['#2f5a3a', '#b3ff8a']];
+const PREFIX = ['Renascido', 'Ancestral', 'Profano', 'Eterno', 'Corrompido', 'Primevo'];
 function makeBosses(n, rng) {
-  const idx = n / 3 - 1, cycle = Math.floor(idx / BOSSARCH.length);
-  const arch = idx < BOSSARCH.length ? BOSSARCH[idx] : BOSSARCH[Math.floor(rng() * BOSSARCH.length)];
+  const idx = n / 3 - 1, cycle = Math.floor(idx / REALMS.length), realm = realmOf(n);
+  const arch = realm.bosses[cycle % realm.bosses.length];
+  const repeat = cycle >= realm.bosses.length;
   const mods = [];
   if (cycle >= 1) {
     const pool = ['colossal', 'veloz', 'ardente', 'sombrio', 'gemeos'];
-    const k = Math.min(1 + (rng() < 0.45 ? 1 : 0) + (cycle >= 2 && rng() < 0.5 ? 1 : 0), 3);
+    const k = Math.min((rng() < 0.6 ? 1 : 0) + (cycle >= 2 && rng() < 0.5 ? 1 : 0) + (cycle >= 3 ? 1 : 0), 3);
     while (mods.length < k) { const m = pick(pool, rng); if (!mods.includes(m)) mods.push(m); }
   } else if (idx >= 4 && rng() < 0.35) mods.push(pick(['ardente', 'veloz'], rng));
   const attacks = arch.attacks.slice(), p2 = arch.p2.slice();
-  if (cycle >= 1) { let a; do { a = pick(ALL_ATK, rng); } while (attacks.includes(a) || p2.includes(a)); p2.push(a); }
-  if (cycle >= 2) { let a; do { a = pick(ALL_ATK, rng); } while (attacks.includes(a) || p2.includes(a)); attacks.push(a); }
+  if (cycle >= 2) { let a; do { a = pick(ALL_ATK, rng); } while (attacks.includes(a) || p2.includes(a)); p2.push(a); }
+  if (cycle >= 3) { let a; do { a = pick(ALL_ATK, rng); } while (attacks.includes(a) || p2.includes(a)); attacks.push(a); }
   if (mods.includes('sombrio') && !attacks.includes('teleport')) attacks.push('teleport');
-  const nm = pick(NAMES1, rng) + pick(NAMES2, rng), epi = pick(EPI, rng);
-  const hue = cycle >= 1 ? pick(HUES, rng) : [arch.col, arch.col2];
+  const title = (repeat ? pick(PREFIX, rng) + ' ' : '') + arch.name;
+  const hue = repeat ? pick(HUES, rng) : [arch.col, arch.col2];
   const twins = mods.includes('gemeos');
   const hf = 1 + (n - 1) * 0.17, df = 1 + (n - 1) * 0.075;
-  const list = [];
-  const count = twins ? 2 : 1;
+  const list = [], count = twins ? 2 : 1;
   for (let i = 0; i < count; i++) {
     let r = arch.r, hp = arch.hp * hf, sp = 1;
     if (mods.includes('colossal')) { r *= 1.4; hp *= 1.5; sp *= 0.88; }
     if (mods.includes('veloz')) sp *= 1.28;
     if (twins) { hp *= 0.62; r *= 0.85; }
     const b = {
-      isBoss: true, arch, shape: arch.shape, name: `${arch.title} ${nm}${twins ? (i ? ' II' : ' I') : ''}`, epi,
+      isBoss: true, arch, shape: arch.shape, deco: arch.deco, title, name: title + (twins ? (i ? ' II' : ' I') : ''), epi: arch.epi,
       x: world.w / 2 + (twins ? (i ? 140 : -140) : 0), y: world.h / 3, r, hp, mhp: hp, dmg: 22 * df, sp, spd: 95,
       attacks: attacks.slice(), p2atk: p2, p2: false, act: null, idle: 1.4 + i * 0.7, face: PI / 2, poise: 14 + n * 0.3, mpoise: 14 + n * 0.3,
       broken: 0, flash: 0, awake: false, mods, col: i ? shadeHex(hue[0], -25) : hue[0], col2: hue[1], air: false, alpha: 1, strafe: R() < 0.5 ? 1 : -1,
@@ -540,11 +602,11 @@ function kill(e) {
       enemies = []; hazards = []; projs = [];
       S.bosses++; S.checkpoint = world.n + 1; S.stage = world.n + 1; S.best = Math.max(S.best, world.n + 1); persist();
       victoryT = 4.5; sfx('victory');
-      banner = { text: 'GRANDE INIMIGO ABATIDO', sub: e.name.replace(/ I+$/, '') + ', ' + e.epi, t: 4.5, col: '#ffd166' };
+      banner = { text: 'GRANDE INIMIGO ABATIDO', sub: e.title + ', ' + e.epi, t: 4.5, col: '#ffd166' };
     }
   } else {
     enemies = enemies.filter(x => x !== e); cancelHaz(e);
-    burst(e.x, e.y, 18, e.d.col, 160, 'dust'); soulsTo(e.x, e.y, e.minion ? 2 : 6);
+    burst(e.x, e.y, 18, e.col, 160, 'dust'); soulsTo(e.x, e.y, e.minion ? 2 : 6);
     S.souls += e.souls; floatTxt(e.x, e.y - 18, '+' + e.souls, '#9fe7c9', 12);
     if (!world.isBoss && enemies.length === 0 && !world.open) {
       world.open = true; sfx('gate'); msg = { text: 'Uma passagem se abriu ao norte', t: 3, col: '#9fe7c9' };
@@ -602,7 +664,7 @@ function wakeBosses() {
   bosses.forEach(b => b.awake = true); sfx('roar'); shake = 10;
   const b = bosses[0];
   const mods = b.mods.length ? ' · ' + b.mods.map(m => MODNAME[m]).join(' · ') : '';
-  banner = { text: bosses.length > 1 ? `${b.arch.title}s Gêmeos ${b.name.split(' ').slice(-2, -1)[0]}` : b.name, sub: b.epi + mods, t: 3.5, col: '#e8d9b0', boss: true };
+  banner = { text: bosses.length > 1 ? `${b.title} (Gêmeos)` : b.name, sub: b.epi + mods, t: 3.5, col: '#e8d9b0', boss: true };
 }
 const T = (b, x) => x / b.sp;
 function aimB(b) { b.face = atan2(P.y - b.y, P.x - b.x); }
@@ -762,7 +824,7 @@ function updBoss(b, dt) {
   if (b.broken > 0) { b.broken -= dt; return; }
   if (!b.p2 && b.hp < b.mhp * 0.5) {
     b.p2 = true; b.sp *= 1.2; b.attacks = b.attacks.concat(b.p2atk); b.act = null; b.air = false; b.alpha = 1; cancelHaz(b);
-    sfx('roar'); shake = 14; msg = { text: `${b.name.split(' ')[1]} desperta sua fúria`, t: 2.4, col: '#ff6b6b' };
+    sfx('roar'); shake = 14; msg = { text: `${b.title} desperta sua fúria`, t: 2.4, col: '#ff6b6b' };
     addHaz({ shape: 'circle', x: b.x, y: b.y, r: 150, delay: 0.5, dmg: b.dmg * 0.4, owner: b, kb: 380, boom: 8 });
     b.idle = 1.0; return;
   }
@@ -876,18 +938,161 @@ function drawFloor() {
 function drawObs() {
   const B = world.biome;
   for (const o of world.obs) {
-    ctx.fillStyle = 'rgba(0,0,0,0.35)'; ctx.beginPath(); ctx.ellipse(o.x + 6, o.y + 8, o.r * 1.05, o.r * 0.85, 0, 0, TAU); ctx.fill();
-    if (o.kind === 'grave') {
-      ctx.fillStyle = B.obs; ctx.fillRect(o.x - o.r * 0.7, o.y - o.r, o.r * 1.4, o.r * 1.8);
-      ctx.fillStyle = B.obsTop; circle(o.x, o.y - o.r * 0.6, o.r * 0.7); ctx.fill(); ctx.fillRect(o.x - o.r * 0.7, o.y - o.r * 0.6, o.r * 1.4, o.r * 1.2);
-      ctx.strokeStyle = 'rgba(0,0,0,0.4)'; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(o.x, o.y - o.r * 0.9); ctx.lineTo(o.x, o.y + o.r * 0.2); ctx.moveTo(o.x - o.r * 0.35, o.y - o.r * 0.5); ctx.lineTo(o.x + o.r * 0.35, o.y - o.r * 0.5); ctx.stroke();
-    } else {
-      ctx.fillStyle = B.obs; circle(o.x, o.y, o.r); ctx.fill();
-      const g = ctx.createRadialGradient(o.x - o.r * 0.3, o.y - o.r * 0.4, o.r * 0.1, o.x, o.y, o.r);
-      g.addColorStop(0, B.obsTop); g.addColorStop(1, B.obs); ctx.fillStyle = g; circle(o.x, o.y, o.r * 0.86); ctx.fill();
-      ctx.strokeStyle = 'rgba(0,0,0,0.35)'; ctx.lineWidth = 2; circle(o.x, o.y, o.r * 0.6); ctx.stroke();
+    const x = o.x, y = o.y, r = o.r;
+    ctx.fillStyle = 'rgba(0,0,0,0.35)'; ctx.beginPath(); ctx.ellipse(x + 6, y + 8, r * 1.05, r * 0.85, 0, 0, TAU); ctx.fill();
+    switch (o.kind) {
+      case 'column': {
+        ctx.fillStyle = shadeHex(B.obsTop, -50); circle(x, y, r); ctx.fill();
+        ctx.fillStyle = B.obsTop; circle(x, y, r * 0.84); ctx.fill();
+        ctx.strokeStyle = shadeHex(B.obsTop, -40); ctx.lineWidth = 1.5;
+        for (let i = 0; i < 12; i++) { const a = i * TAU / 12; ctx.beginPath(); ctx.moveTo(x + cos(a) * r * 0.5, y + sin(a) * r * 0.5); ctx.lineTo(x + cos(a) * r * 0.82, y + sin(a) * r * 0.82); ctx.stroke(); }
+        ctx.fillStyle = shadeHex(B.obsTop, 20); circle(x - r * 0.15, y - r * 0.15, r * 0.4); ctx.fill();
+        break;
+      }
+      case 'rune': {
+        ctx.fillStyle = B.obs; ctx.beginPath(); ctx.ellipse(x, y, r * 0.75, r, 0, 0, TAU); ctx.fill();
+        ctx.fillStyle = B.obsTop; ctx.beginPath(); ctx.ellipse(x - 2, y - 3, r * 0.62, r * 0.86, 0, 0, TAU); ctx.fill();
+        ctx.strokeStyle = B.accent; ctx.globalAlpha = 0.55 + 0.35 * sin(gtime * 2 + o.ph); ctx.lineWidth = 2.5; ctx.lineCap = 'round'; ctx.beginPath();
+        ctx.moveTo(x - 2, y - r * 0.6); ctx.lineTo(x - 2, y + r * 0.5); ctx.moveTo(x - 2, y - r * 0.35); ctx.lineTo(x + r * 0.3, y - r * 0.05); ctx.moveTo(x - 2, y + r * 0.05); ctx.lineTo(x - r * 0.3, y - r * 0.25); ctx.stroke(); ctx.globalAlpha = 1;
+        break;
+      }
+      case 'obelisk': {
+        const s = r * 0.85; ctx.fillStyle = B.obs; ctx.fillRect(x - s, y - s, s * 2, s * 2);
+        ctx.fillStyle = B.obsTop; ctx.beginPath(); ctx.moveTo(x - s, y - s); ctx.lineTo(x + s, y - s); ctx.lineTo(x, y); ctx.fill();
+        ctx.fillStyle = shadeHex(B.obsTop, -25); ctx.beginPath(); ctx.moveTo(x - s, y - s); ctx.lineTo(x - s, y + s); ctx.lineTo(x, y); ctx.fill();
+        ctx.fillStyle = shadeHex(B.obs, -20); ctx.beginPath(); ctx.moveTo(x + s, y + s); ctx.lineTo(x - s, y + s); ctx.lineTo(x, y); ctx.fill();
+        ctx.fillStyle = '#ffe08a'; circle(x, y, r * 0.16); ctx.fill();
+        ctx.fillStyle = 'rgba(0,0,0,0.35)'; for (let i = 0; i < 3; i++) { ctx.fillRect(x + s * 0.35, y - s * 0.5 + i * s * 0.4, s * 0.25, s * 0.12); }
+        break;
+      }
+      case 'lantern': {
+        const s = r * 0.7; ctx.fillStyle = B.obs; ctx.fillRect(x - s, y - s, s * 2, s * 2);
+        ctx.save(); ctx.translate(x, y); ctx.rotate(PI / 4); ctx.fillStyle = B.obsTop; ctx.fillRect(-s * 1.05, -s * 1.05, s * 2.1, s * 2.1); ctx.restore();
+        const g = ctx.createRadialGradient(x, y, 1, x, y, r * 1.6); g.addColorStop(0, `rgba(255,170,90,${0.55 + 0.15 * sin(gtime * 5 + o.ph)})`); g.addColorStop(1, 'rgba(255,120,60,0)');
+        ctx.fillStyle = g; circle(x, y, r * 1.6); ctx.fill(); ctx.fillStyle = '#ffd08a'; circle(x, y, r * 0.2); ctx.fill();
+        break;
+      }
+      case 'stepped': {
+        for (let i = 0; i < 4; i++) { const s = r * (1 - i * 0.22); ctx.fillStyle = shadeHex(B.obsTop, -40 + i * 15); ctx.fillRect(x - s, y - s, s * 2, s * 2); }
+        ctx.fillStyle = B.accent; ctx.globalAlpha = 0.7; ctx.fillRect(x - r * 0.15, y - r * 0.15, r * 0.3, r * 0.3); ctx.globalAlpha = 1;
+        break;
+      }
+      case 'tree': {
+        ctx.fillStyle = B.obs; circle(x, y, r * 0.5); ctx.fill();
+        for (let i = 0; i < 5; i++) { const a = o.ph + i * TAU / 5; ctx.fillStyle = shadeHex(B.obsTop, -15 + (i % 2) * 12); circle(x + cos(a) * r * 0.45, y + sin(a) * r * 0.45 - 4, r * 0.7); ctx.fill(); }
+        ctx.fillStyle = shadeHex(B.obsTop, 15); circle(x - r * 0.15, y - r * 0.25, r * 0.55); ctx.fill();
+        break;
+      }
+      case 'birch': {
+        ctx.fillStyle = B.obs; circle(x, y, r * 0.55); ctx.fill();
+        ctx.fillStyle = '#222'; for (let i = 0; i < 4; i++) { const a = o.ph + i * 1.7; ctx.fillRect(x + cos(a) * r * 0.25 - 4, y + sin(a) * r * 0.25, 8, 2.5); }
+        ctx.fillStyle = B.obsTop; ctx.globalAlpha = 0.85; for (let i = 0; i < 4; i++) { const a = o.ph + i * TAU / 4; circle(x + cos(a) * r * 0.6, y + sin(a) * r * 0.6, r * 0.45); ctx.fill(); } ctx.globalAlpha = 1;
+        break;
+      }
+      case 'brazier': {
+        ctx.fillStyle = '#1a0c0c'; circle(x, y, r); ctx.fill(); ctx.fillStyle = B.obsTop; circle(x, y, r * 0.8); ctx.fill(); ctx.fillStyle = '#2a0a0a'; circle(x, y, r * 0.6); ctx.fill();
+        for (let i = 0; i < 7; i++) { const t = (gtime * 1.5 + i / 7 + o.ph) % 1, fx = x + sin(i * 5 + gtime * 4) * r * 0.3 * (1 - t), fy = y - t * r * 1.2, fr = r * (0.45 - t * 0.35);
+          ctx.fillStyle = t < 0.35 ? 'rgba(255,230,150,0.85)' : 'rgba(255,90,30,0.6)'; circle(fx, fy, Math.max(1, fr)); ctx.fill(); }
+        break;
+      }
+      default: {
+        ctx.fillStyle = B.obs; circle(x, y, r); ctx.fill();
+        const g = ctx.createRadialGradient(x - r * 0.3, y - r * 0.4, r * 0.1, x, y, r);
+        g.addColorStop(0, B.obsTop); g.addColorStop(1, B.obs); ctx.fillStyle = g; circle(x, y, r * 0.86); ctx.fill();
+        ctx.strokeStyle = 'rgba(0,0,0,0.35)'; ctx.lineWidth = 2; circle(x, y, r * 0.6); ctx.stroke();
+      }
     }
   }
+}
+/* Adornos mitológicos (chifres, asas, cabeças extras...). (hx,hy,hr)=cabeça; r=corpo; f=direção. */
+function drawDeco(D, layer, f, hx, hy, hr, r, accent, isBoss) {
+  if (!D) return;
+  const fx = cos(f), fy = sin(f), px = -fy, py = fx, lw = Math.max(2, r * 0.12);
+  ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+  if (layer === 'back') {
+    if (D.wings) {
+      const flap = sin(gtime * 8 + r) * 0.25;
+      for (const s of [1, -1]) {
+        const bx = -fx * r * 0.2, by = -fy * r * 0.2, a = f + PI + s * (1.0 + flap), L = r * (isBoss ? 2.2 : 1.6);
+        ctx.fillStyle = isBoss && D.halo ? 'rgba(235,230,215,0.85)' : 'rgba(40,25,30,0.85)';
+        ctx.beginPath(); ctx.moveTo(bx + px * s * r * 0.4, by + py * s * r * 0.4); ctx.lineTo(bx + cos(a) * L, by + sin(a) * L);
+        ctx.lineTo(bx + cos(a + s * 0.5) * L * 0.75, by + sin(a + s * 0.5) * L * 0.75); ctx.lineTo(bx + cos(a + s * 0.9) * L * 0.6, by + sin(a + s * 0.9) * L * 0.6); ctx.closePath(); ctx.fill();
+      }
+    }
+    if (D.tails) {
+      const n = D.tails;
+      for (let i = 0; i < n; i++) {
+        const a = f + PI + (n > 1 ? (i - (n - 1) / 2) * (1.6 / Math.max(1, n - 1)) : 0) + sin(gtime * 3 + i) * 0.12, L = r * (isBoss ? 1.9 : 1.5);
+        ctx.strokeStyle = shadeHex(accent, -30); ctx.lineWidth = lw * 2.4; ctx.beginPath(); ctx.moveTo(-fx * r * 0.4, -fy * r * 0.4);
+        ctx.quadraticCurveTo(cos(a - 0.3) * L * 0.6, sin(a - 0.3) * L * 0.6, cos(a) * L, sin(a) * L); ctx.stroke();
+        ctx.fillStyle = '#fff6e0'; circle(cos(a) * L, sin(a) * L, lw * 1.3); ctx.fill();
+      }
+    }
+    if (D.chains) {
+      ctx.strokeStyle = '#9aa0a8'; ctx.lineWidth = 2;
+      for (const s of [1, -1]) for (let i = 0; i < 5; i++) { const t = i * 0.3 + 0.5, cx = -fx * r * t * 1.4 + px * s * r * (0.5 + sin(gtime * 4 + i) * 0.1), cy = -fy * r * t * 1.4 + py * s * r * (0.5 + sin(gtime * 4 + i) * 0.1); ctx.beginPath(); ctx.ellipse(cx, cy, 5, 3, f + i, 0, TAU); ctx.stroke(); }
+    }
+    if (D.heads) {
+      const n = D.heads;
+      for (let i = 0; i < n; i++) {
+        const a = f + (i - (n - 1) / 2) * (2.4 / Math.max(1, n)) + sin(gtime * 2.5 + i * 1.7) * 0.12, L = r * (1.25 + 0.15 * sin(gtime * 3 + i));
+        const x = cos(a) * L, y = sin(a) * L;
+        ctx.strokeStyle = shadeHex(accent, -10); ctx.lineWidth = r * 0.32; ctx.beginPath(); ctx.moveTo(0, 0); ctx.quadraticCurveTo(cos(a + 0.4) * L * 0.5, sin(a + 0.4) * L * 0.5, x, y); ctx.stroke();
+        ctx.fillStyle = accent; circle(x, y, r * 0.3); ctx.fill();
+        eyes(x, y, a, r * 0.3, isBoss ? '#ffd166' : '#ff3b2f');
+      }
+    }
+    if (D.pincers) {
+      ctx.strokeStyle = '#3a2410'; ctx.lineWidth = lw * 1.6;
+      ctx.beginPath(); ctx.moveTo(-fx * r * 0.8, -fy * r * 0.8); ctx.quadraticCurveTo(-fx * r * 1.8, -fy * r * 1.8, -fx * r * 1.2 + px * r * 0.6, -fy * r * 1.2 + py * r * 0.6); ctx.stroke();
+      ctx.fillStyle = '#ff5a3a'; circle(-fx * r * 1.2 + px * r * 0.6, -fy * r * 1.2 + py * r * 0.6, lw); ctx.fill();
+    }
+    return;
+  }
+  // camada da frente
+  if (D.mane) { ctx.fillStyle = '#7a4a1a'; for (let i = 0; i < 10; i++) { const a = i * TAU / 10; circle(hx + cos(a) * hr * 0.95, hy + sin(a) * hr * 0.95, hr * 0.35); ctx.fill(); } }
+  if (D.jaws || D.snout) {
+    const L = hr * (D.jaws ? 1.6 : 1.0); ctx.fillStyle = D.jaws ? shadeHex(accent, -10) : '#5a4a3a';
+    ctx.beginPath(); ctx.moveTo(hx + px * hr * 0.5, hy + py * hr * 0.5); ctx.lineTo(hx + fx * (hr + L) + px * hr * 0.2, hy + fy * (hr + L) + py * hr * 0.2);
+    ctx.lineTo(hx + fx * (hr + L) - px * hr * 0.2, hy + fy * (hr + L) - py * hr * 0.2); ctx.lineTo(hx - px * hr * 0.5, hy - py * hr * 0.5); ctx.fill();
+    if (D.jaws) { ctx.fillStyle = '#f5f0e0'; for (let i = 1; i < 5; i++) for (const s of [1, -1]) { const t = hr + L * i / 5; circle(hx + fx * t + px * s * hr * 0.35 * (1 - i / 6), hy + fy * t + py * s * hr * 0.35 * (1 - i / 6), 1.6); ctx.fill(); } }
+  }
+  if (D.beak) { ctx.fillStyle = '#e0a020'; ctx.beginPath(); ctx.moveTo(hx + px * hr * 0.4, hy + py * hr * 0.4); ctx.lineTo(hx + fx * hr * 1.9, hy + fy * hr * 1.9); ctx.lineTo(hx - px * hr * 0.4, hy - py * hr * 0.4); ctx.fill(); }
+  if (D.helm || D.kabuto) { ctx.fillStyle = D.kabuto ? '#2a2020' : '#8a7a5a'; ctx.beginPath(); ctx.arc(hx, hy, hr * 1.05, f + PI / 2, f + PI * 1.5); ctx.fill(); ctx.strokeStyle = D.kabuto ? '#2a2020' : '#b03a2a'; ctx.lineWidth = lw * 1.4; ctx.beginPath(); ctx.moveTo(hx + fx * hr * 0.3, hy + fy * hr * 0.3); ctx.lineTo(hx - fx * hr * 1.3, hy - fy * hr * 1.3); ctx.stroke(); }
+  if (D.kabuto) { ctx.strokeStyle = '#ffd166'; ctx.lineWidth = lw; ctx.beginPath(); ctx.moveTo(hx + px * hr, hy + py * hr); ctx.quadraticCurveTo(hx + fx * hr * 1.4, hy + fy * hr * 1.4, hx - px * hr, hy - py * hr); ctx.stroke(); }
+  if (D.hood) { ctx.fillStyle = 'rgba(15,10,20,0.9)'; ctx.beginPath(); ctx.arc(hx, hy, hr * 1.1, f + PI * 0.45, f + PI * 1.55); ctx.lineTo(hx + fx * hr * 0.2, hy + fy * hr * 0.2); ctx.fill(); }
+  if (D.nemes) { for (const s of [1, -1]) { ctx.fillStyle = '#d9b36a'; ctx.beginPath(); ctx.moveTo(hx + px * s * hr * 0.6, hy + py * s * hr * 0.6); ctx.lineTo(hx + px * s * hr * 1.3 - fx * hr * 0.9, hy + py * s * hr * 1.3 - fy * hr * 0.9); ctx.lineTo(hx - fx * hr * 0.6, hy - fy * hr * 0.6); ctx.fill(); ctx.strokeStyle = '#2a4a8a'; ctx.lineWidth = 1.5; ctx.stroke(); } }
+  if (D.feathers) { const cols = ['#e04a3a', '#3fd1a0', '#ffd166', '#3a8ad1', '#e04a3a']; for (let i = 0; i < 5; i++) { const a = f + PI + (i - 2) * 0.35; ctx.strokeStyle = cols[i]; ctx.lineWidth = lw * 1.2; ctx.beginPath(); ctx.moveTo(hx, hy); ctx.lineTo(hx + cos(a) * hr * 2.2, hy + sin(a) * hr * 2.2); ctx.stroke(); } }
+  if (D.skull) {
+    ctx.fillStyle = '#ece6d6'; circle(hx, hy, hr * 0.95); ctx.fill();
+    ctx.fillStyle = '#111'; for (const s of [1, -1]) { circle(hx + fx * hr * 0.35 + px * s * hr * 0.35, hy + fy * hr * 0.35 + py * s * hr * 0.35, hr * 0.24); ctx.fill(); }
+    ctx.fillStyle = accent; for (const s of [1, -1]) { circle(hx + fx * hr * 0.35 + px * s * hr * 0.35, hy + fy * hr * 0.35 + py * s * hr * 0.35, hr * 0.08); ctx.fill(); }
+  }
+  if (D.oneEye) { ctx.fillStyle = '#f5f0e0'; circle(hx + fx * hr * 0.4, hy + fy * hr * 0.4, hr * 0.45); ctx.fill(); ctx.fillStyle = '#c0392b'; circle(hx + fx * hr * 0.55, hy + fy * hr * 0.55, hr * 0.22); ctx.fill(); }
+  if (D.bellyMouth) { ctx.fillStyle = '#1a0a0a'; ctx.beginPath(); ctx.ellipse(-fx * r * 0.1, -fy * r * 0.1, r * 0.35, r * 0.18, f + PI / 2, 0, TAU); ctx.fill(); ctx.fillStyle = '#eee'; for (let i = -2; i <= 2; i++) { circle(-fx * r * 0.1 + px * i * r * 0.1, -fy * r * 0.1 + py * i * r * 0.1, 1.8); ctx.fill(); } }
+  if (D.horns) for (const s of [1, -1]) {
+    ctx.strokeStyle = '#e8dcc8'; ctx.lineWidth = lw * 1.3; ctx.beginPath();
+    const bx = hx + px * s * hr * 0.7, by = hy + py * s * hr * 0.7;
+    ctx.moveTo(bx, by); ctx.quadraticCurveTo(bx + px * s * hr * 0.9, by + py * s * hr * 0.9, bx + px * s * hr * 0.8 + fx * hr * 0.9, by + py * s * hr * 0.8 + fy * hr * 0.9); ctx.stroke();
+  }
+  if (D.ears) for (const s of [1, -1]) { ctx.fillStyle = shadeHex(accent, -20); ctx.beginPath(); const bx = hx + px * s * hr * 0.6, by = hy + py * s * hr * 0.6; ctx.moveTo(bx - fx * hr * 0.3, by - fy * hr * 0.3); ctx.lineTo(bx + px * s * hr * 0.6 - fx * hr * 0.4, by + py * s * hr * 0.6 - fy * hr * 0.4); ctx.lineTo(bx + fx * hr * 0.3, by + fy * hr * 0.3); ctx.fill(); }
+  if (D.snakes) for (let i = 0; i < 7; i++) {
+    const a = f + PI + (i - 3) * 0.45, w = sin(gtime * 6 + i) * 0.35; ctx.strokeStyle = i % 2 ? '#4a8a3a' : '#6aaa4a'; ctx.lineWidth = lw;
+    ctx.beginPath(); ctx.moveTo(hx + cos(a) * hr * 0.6, hy + sin(a) * hr * 0.6); ctx.quadraticCurveTo(hx + cos(a + w) * hr * 1.4, hy + sin(a + w) * hr * 1.4, hx + cos(a - w) * hr * 2.0, hy + sin(a - w) * hr * 2.0); ctx.stroke();
+  }
+  if (D.redcap) { ctx.fillStyle = '#d0201a'; ctx.beginPath(); ctx.arc(hx - fx * hr * 0.2, hy - fy * hr * 0.2, hr * 0.85, 0, TAU); ctx.fill(); ctx.beginPath(); ctx.moveTo(hx - fx * hr * 0.6 + px * hr * 0.4, hy - fy * hr * 0.6 + py * hr * 0.4); ctx.lineTo(hx - fx * hr * 1.8, hy - fy * hr * 1.8); ctx.lineTo(hx - fx * hr * 0.6 - px * hr * 0.4, hy - fy * hr * 0.6 - py * hr * 0.4); ctx.fill(); }
+  if (D.hat) { ctx.fillStyle = 'rgba(60,40,25,0.95)'; circle(hx, hy, hr * 1.4); ctx.fill(); ctx.fillStyle = '#2a1a10'; circle(hx, hy, hr * 0.8); ctx.fill(); }
+  if (D.wraps) { ctx.strokeStyle = 'rgba(240,230,200,0.75)'; ctx.lineWidth = 2; for (let i = -2; i <= 2; i++) { ctx.beginPath(); ctx.moveTo(-r * 0.8, i * r * 0.3 - r * 0.2); ctx.lineTo(r * 0.8, i * r * 0.3 + r * 0.2); ctx.stroke(); } }
+  if (D.bones) { ctx.strokeStyle = 'rgba(245,240,225,0.8)'; ctx.lineWidth = 1.6; for (let i = -1; i <= 1; i++) { const cx = -fx * r * 0.35 + px * i * r * 0.28, cy = -fy * r * 0.35 + py * i * r * 0.28; ctx.beginPath(); ctx.moveTo(cx - fx * r * 0.25, cy - fy * r * 0.25); ctx.lineTo(cx + fx * r * 0.25, cy + fy * r * 0.25); ctx.stroke(); } }
+  if (D.spots) { ctx.fillStyle = 'rgba(30,20,10,0.7)'; for (let i = 0; i < 6; i++) { circle(cos(i * 2.3) * r * 0.5, sin(i * 2.3) * r * 0.5, 2); ctx.fill(); } }
+  if (D.fangs) { ctx.fillStyle = '#fff'; for (const s of [1, -1]) { const bx = hx + fx * hr * 0.9 + px * s * hr * 0.2, by = hy + fy * hr * 0.9 + py * s * hr * 0.2; ctx.beginPath(); ctx.moveTo(bx - px * 2, by - py * 2); ctx.lineTo(bx + fx * 5, by + fy * 5); ctx.lineTo(bx + px * 2, by + py * 2); ctx.fill(); } }
+  if (D.crown) { ctx.fillStyle = '#ffd166'; ctx.beginPath(); for (let i = 0; i <= 10; i++) { const a = i * TAU / 10, rr = hr * (i % 2 ? 0.75 : 1.05); i ? ctx.lineTo(hx + cos(a) * rr, hy + sin(a) * rr - 3) : ctx.moveTo(hx + cos(a) * rr, hy + sin(a) * rr - 3); } ctx.closePath(); ctx.lineWidth = 2; ctx.strokeStyle = '#ffd166'; ctx.stroke(); }
+  if (D.halo) { ctx.strokeStyle = `rgba(255,209,102,${0.6 + 0.3 * sin(gtime * 3)})`; ctx.lineWidth = 3; ctx.beginPath(); ctx.ellipse(hx, hy - hr * 1.6, hr * 0.9, hr * 0.35, 0, 0.3, PI * 1.6); ctx.stroke(); }
+  if (D.headless || D.flame) {
+    const cx = D.headless ? hx : 0, cy = D.headless ? hy : 0, rr = D.headless ? hr : r * 0.9;
+    for (let i = 0; i < 6; i++) { const t = (gtime * 2 + i / 6) % 1; ctx.fillStyle = t < 0.4 ? 'rgba(255,230,140,0.7)' : 'rgba(255,100,30,0.45)'; circle(cx + sin(i * 4 + gtime * 5) * rr * 0.4, cy - t * rr * 1.6, Math.max(1, rr * (0.6 - t * 0.5))); ctx.fill(); }
+  }
+  if (D.ghost) { ctx.strokeStyle = 'rgba(200,230,255,0.35)'; ctx.lineWidth = r * 0.5; ctx.beginPath(); ctx.moveTo(-fx * r * 0.5, -fy * r * 0.5); ctx.quadraticCurveTo(-fx * r * 1.2 + px * sin(gtime * 4) * r * 0.5, -fy * r * 1.2 + py * sin(gtime * 4) * r * 0.5, -fx * r * 1.8, -fy * r * 1.8); ctx.stroke(); }
 }
 function drawExit() {
   const e = world.exit, B = world.biome;
@@ -942,15 +1147,21 @@ function drawEnemy(e) {
   ctx.save(); ctx.translate(e.x, e.y);
   ctx.fillStyle = 'rgba(0,0,0,0.35)'; ctx.beginPath(); ctx.ellipse(2, e.r * 0.7, e.r * 1.1, e.r * 0.5, 0, 0, TAU); ctx.fill();
   if (wind) { ctx.fillStyle = `rgba(255,60,40,${0.25 + 0.2 * sin(gtime * 30)})`; circle(0, 0, e.r + 7); ctx.fill(); }
-  const body = fl ? '#fff' : D.col, dark = shadeHex(D.col, -35);
+  const body = fl ? '#fff' : e.col, dark = shadeHex(e.col, -35), DC = e.deco;
+  if (DC.ghost) ctx.globalAlpha = 0.7;
   const f = e.face, bob = sin(e.wob * 2) * 1.2;
   if (e.type === 'hound') {
+    drawDeco(DC, 'back', f, cos(f) * e.r * 0.9, sin(f) * e.r * 0.9, e.r * 0.55, e.r, e.col, false);
     ctx.rotate(f); ctx.fillStyle = dark; ctx.beginPath(); ctx.ellipse(-4, 0, e.r * 1.4, e.r * 0.8, 0, 0, TAU); ctx.fill();
     ctx.fillStyle = body; ctx.beginPath(); ctx.ellipse(-2, 0, e.r * 1.2, e.r * 0.65, 0, 0, TAU); ctx.fill();
-    circle(e.r * 0.9, 0, e.r * 0.55); ctx.fill(); ctx.rotate(-f); eyes(cos(f) * e.r * 0.5, sin(f) * e.r * 0.5, f, e.r * 0.7, wind ? '#ff3b2f' : '#ffcc66');
+    if (!DC.headless) { circle(e.r * 0.9, 0, e.r * 0.55); ctx.fill(); } ctx.rotate(-f);
+    if (!DC.headless) eyes(cos(f) * e.r * 0.5, sin(f) * e.r * 0.5, f, e.r * 0.7, wind ? '#ff3b2f' : '#ffcc66');
+    drawDeco(DC, 'front', f, cos(f) * e.r * 0.9, sin(f) * e.r * 0.9, e.r * 0.55, e.r, e.col, false);
   } else {
-    ctx.fillStyle = dark; circle(0, bob, e.r); ctx.fill();
-    ctx.fillStyle = body; circle(0, bob - 1, e.r * 0.82); ctx.fill();
+    ctx.translate(0, bob);
+    drawDeco(DC, 'back', f, cos(f) * e.r * 0.3, sin(f) * e.r * 0.3, e.r * 0.6, e.r, e.col, false);
+    ctx.fillStyle = dark; circle(0, 0, e.r); ctx.fill();
+    ctx.fillStyle = body; circle(0, -1, e.r * 0.82); ctx.fill();
     ctx.strokeStyle = fl ? '#fff' : '#cfc6b4'; ctx.lineWidth = e.type === 'knight' || e.type === 'brute' ? 4 : 2.5; ctx.lineCap = 'round';
     const wa = f + (wind ? -1.1 : 0.5);
     if (e.type === 'archer') { ctx.strokeStyle = '#a3865a'; ctx.beginPath(); ctx.arc(cos(f) * e.r * 0.6, sin(f) * e.r * 0.6, e.r * 0.9, f - 1.2, f + 1.2); ctx.stroke(); }
@@ -958,7 +1169,9 @@ function drawEnemy(e) {
     else if (e.type === 'brute') { ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(cos(wa) * e.r * 2.2, sin(wa) * e.r * 2.2); ctx.stroke(); ctx.fillStyle = '#555'; circle(cos(wa) * e.r * 2.2, sin(wa) * e.r * 2.2, 8); ctx.fill(); }
     else { ctx.beginPath(); ctx.moveTo(cos(wa) * e.r * 0.5, sin(wa) * e.r * 0.5); ctx.lineTo(cos(wa) * e.r * 2.1, sin(wa) * e.r * 2.1); ctx.stroke(); }
     if (e.type === 'knight') { ctx.fillStyle = '#4a5260'; ctx.beginPath(); ctx.arc(cos(f - 1.1) * e.r * 0.8, sin(f - 1.1) * e.r * 0.8, e.r * 0.55, 0, TAU); ctx.fill(); ctx.strokeStyle = '#9aa3ad'; ctx.lineWidth = 2; ctx.stroke(); }
-    eyes(0, bob - 1, f, e.r, wind ? '#ff3b2f' : (e.minion ? '#9effa8' : '#ffcc66'));
+    drawDeco(DC, 'front', f, cos(f) * e.r * 0.3, sin(f) * e.r * 0.3, e.r * 0.6, e.r, e.col, false);
+    if (!DC.oneEye && !DC.skull && !DC.hat) eyes(0, -1, f, e.r, wind ? '#ff3b2f' : (e.minion ? '#9effa8' : '#ffcc66'));
+    else if (wind) { ctx.fillStyle = '#ff3b2f'; circle(cos(f) * e.r * 0.5, sin(f) * e.r * 0.5, 2.5); ctx.fill(); }
   }
   ctx.restore();
   if (e.hp < e.mhp) {
@@ -985,7 +1198,11 @@ function drawBoss(b) {
   ctx.translate(b.x, b.y);
   ctx.fillStyle = 'rgba(0,0,0,0.4)'; ctx.beginPath(); ctx.ellipse(4, r * 0.75, r * 1.2, r * 0.55, 0, 0, TAU); ctx.fill();
   if (b.p2 || b.glow > 0) { const g = ctx.createRadialGradient(0, 0, r * 0.5, 0, 0, r * 2.2); g.addColorStop(0, `rgba(255,60,40,${0.25 + b.glow * 0.3})`); g.addColorStop(1, 'rgba(255,60,40,0)'); ctx.fillStyle = g; circle(0, 0, r * 2.2); ctx.fill(); }
-  const bob = sin(b.wob * 3) * 2;
+  const bob = sin(b.wob * 3) * 2, D = b.deco || {};
+  const HP = { knight: [0.25, -2, 0.45], duelist: [0.25, -2, 0.45], witch: [0, 0, 0.42], beast: [0.85, 0, 0.55], spider: [0.85, 0, 0.55], golem: [0.35, -4, 0.45], wyrm: [0.6, 0, 0.6], eye: [0, 0, 1] }[b.shape] || [0, 0, 0.5];
+  let hx = cos(f) * r * HP[0], hy = sin(f) * r * HP[0] + bob + HP[1], hr = r * HP[2];
+  if (b.shape === 'witch') { hx = 0; hy = -r * 0.35 + bob; }
+  drawDeco(D, 'back', f, hx, hy, hr, r, b.col, true);
   switch (b.shape) {
     case 'knight': case 'duelist': {
       ctx.fillStyle = shadeHex(c2, -60); ctx.beginPath(); ctx.ellipse(-cos(f) * r * 0.5, -sin(f) * r * 0.5 + bob, r * 1.05, r * 0.9, f, 0, TAU); ctx.fill();
@@ -1001,7 +1218,7 @@ function drawBoss(b) {
       ctx.fillStyle = dark; ctx.beginPath(); ctx.moveTo(0, -r * 1.3 + bob); ctx.lineTo(r * 1.05, r * 0.9); ctx.lineTo(-r * 1.05, r * 0.9); ctx.closePath(); ctx.fill();
       ctx.fillStyle = body; ctx.beginPath(); ctx.moveTo(0, -r * 1.1 + bob); ctx.lineTo(r * 0.8, r * 0.8); ctx.lineTo(-r * 0.8, r * 0.8); ctx.closePath(); ctx.fill();
       ctx.fillStyle = '#111'; circle(0, -r * 0.35 + bob, r * 0.42); ctx.fill(); eyes(0, -r * 0.35 + bob, f, r * 0.42, c2);
-      ctx.fillStyle = '#0d0b10'; ctx.beginPath(); ctx.moveTo(-r * 0.9, -r * 0.55 + bob); ctx.lineTo(r * 0.9, -r * 0.55 + bob); ctx.lineTo(r * 0.1, -r * 2.0 + bob); ctx.closePath(); ctx.fill();
+      if (!D.snakes && !D.skull && !D.ears && !D.jaws) { ctx.fillStyle = '#0d0b10'; ctx.beginPath(); ctx.moveTo(-r * 0.9, -r * 0.55 + bob); ctx.lineTo(r * 0.9, -r * 0.55 + bob); ctx.lineTo(r * 0.1, -r * 2.0 + bob); ctx.closePath(); ctx.fill(); }
       for (let i = 0; i < 3; i++) { const a = b.wob * 2 + i * TAU / 3; ctx.fillStyle = c2; ctx.globalAlpha = b.alpha * 0.85; circle(cos(a) * r * 1.6, sin(a) * r * 1.0 + bob, 5 + b.glow * 4); ctx.fill(); ctx.globalAlpha = b.alpha; }
       break;
     }
@@ -1024,7 +1241,7 @@ function drawBoss(b) {
       for (let i = 0; i < 9; i++) { const a = i * TAU / 9 + 0.2, rr = r * (0.7 + hash2(i, 3) * 0.2); i ? ctx.lineTo(cos(a) * rr, sin(a) * rr + bob - 3) : ctx.moveTo(cos(a) * rr, sin(a) * rr + bob - 3); } ctx.closePath(); ctx.fill();
       ctx.strokeStyle = c2; ctx.lineWidth = 2.5; ctx.globalAlpha = b.alpha * (0.6 + 0.4 * sin(gtime * 4)); ctx.beginPath(); ctx.moveTo(-r * 0.4, -r * 0.2); ctx.lineTo(0, r * 0.1); ctx.lineTo(r * 0.3, -r * 0.3); ctx.moveTo(0, r * 0.1); ctx.lineTo(r * 0.05, r * 0.5); ctx.stroke(); ctx.globalAlpha = b.alpha;
       for (const s of [1, -1]) { ctx.fillStyle = dark; circle(cos(f + s * 1.3) * r * 1.15, sin(f + s * 1.3) * r * 1.15 + bob, r * 0.42); ctx.fill(); }
-      eyes(0, bob - 4, f, r * 0.8, c2); break;
+      if (!D.skull && !D.oneEye) eyes(0, bob - 4, f, r * 0.8, c2); break;
     }
     case 'wyrm': {
       ctx.fillStyle = dark; circle(0, 0, r); ctx.fill(); ctx.fillStyle = body; circle(0, -2, r * 0.85); ctx.fill();
@@ -1039,6 +1256,7 @@ function drawBoss(b) {
       break;
     }
   }
+  drawDeco(D, 'front', f, hx, hy, hr, r, b.col, true);
   if (b.broken > 0) { ctx.fillStyle = '#ffd166'; for (let i = 0; i < 4; i++) { const a = gtime * 5 + i * TAU / 4; circle(cos(a) * r, -r - 8 + sin(a) * 4, 3.5); ctx.fill(); } }
   ctx.restore();
 }
@@ -1157,6 +1375,7 @@ function drawHUD() {
     ctx.strokeStyle = 'rgba(255,240,200,0.9)'; ctx.lineWidth = 2;
     for (let i = 0; i < 4; i++) { const a = gtime * 1.5 + i * PI / 2; ctx.beginPath(); ctx.arc(x, y, r, a, a + 0.6); ctx.stroke(); }
     ctx.fillStyle = '#fff'; circle(x, y, 2.5); ctx.fill();
+    if (!lockT.isBoss) txt(lockT.name, x, y - r - 10, 12, '#e8d9b0', 'center');
   }
 }
 function drawControls() {
@@ -1213,7 +1432,7 @@ function drawMenu() {
   if (menuPage === 'help') { drawHelp(); return; }
   const ts = Math.min(56, W / 13);
   txt('CINZAS ETERNAS', W / 2, H * 0.2, ts, '#e8d9b0', 'center', 'bold');
-  txt('um soulslike de fases infinitas', W / 2, H * 0.2 + ts * 0.85, Math.max(13, ts * 0.32), '#a3957a', 'center', 'italic');
+  txt('um soulslike pelas mitologias do mundo', W / 2, H * 0.2 + ts * 0.85, Math.max(13, ts * 0.32), '#a3957a', 'center', 'italic');
   const bw = Math.min(300, W * 0.6), bh = 44, bx = (W - bw) / 2; let by = H * 0.43;
   if (S.started) { button(bx, by, bw, bh, `Continuar — Fase ${S.stage}`, () => { P = newPlayer(); buildStage(S.stage); state = 'play'; }, { hot: true }); by += bh + 12; }
   button(bx, by, bw, bh, confirmNew > 0 ? 'Apagar progresso? Toque de novo' : 'Novo Jogo', () => {
@@ -1231,7 +1450,8 @@ function drawHelp() {
     ['ROLAR: esquiva com invencibilidade — role ATRAVÉS dos ataques. CURA: bebe um frasco de Brasa.', '#cfc3a6', 14],
     ['MIRA: trava o alvo mais próximo. Tudo consome estamina (barra verde).', '#cfc3a6', 14],
     ['Áreas vermelhas mostram onde o golpe vai cair — saia ou role antes de encher.', '#ff8a80', 14],
-    ['Derrote todos os inimigos para abrir o portal. A cada 3 fases há um chefe.', '#cfc3a6', 14],
+    ['Viaje por 8 reinos míticos: Grego, Nórdico, Egípcio, Japonês, Asteca, Folclore Brasileiro, Inferno e Eslavo.', '#ffd166', 14],
+    ['Cada reino tem 3 fases e termina num chefe lendário. Derrote todos os inimigos para abrir o portal.', '#cfc3a6', 14],
     ['Chefes mudam de fase com 50% de vida. Quebre a postura (barra amarela) para dano crítico.', '#cfc3a6', 14],
     ['Ao morrer você perde as almas, mas pode recuperá-las no local da morte.', '#9fe7c9', 14],
     ['Na fogueira, gaste almas em Vigor, Fôlego e Força. As fases são infinitas.', '#cfc3a6', 14],
@@ -1246,7 +1466,10 @@ function drawBonfire() {
   const fx = W * 0.25, fy = H * 0.62, s = Math.min(1.4, H / 380);
   drawFire(fx, fy, s);
   txt(bonfireFrom === 'death' ? 'Você retornou à fogueira' : 'Fogueira acesa', fx, H * 0.14, Math.min(24, W / 30), '#e8d9b0', 'center');
-  txt(`Ponto de retorno: Fase ${S.checkpoint}`, fx, H * 0.14 + 26, 13, '#a3957a', 'center', 'italic');
+  const RN = realmOf(S.stage);
+  txt(`Próxima: Fase ${S.stage}`, fx, H * 0.14 + 26, 13, '#a3957a', 'center', 'italic');
+  txt(`${RN.name}`, fx, H * 0.14 + 46, 13, '#ffd166', 'center');
+  txt(RN.myth, fx, H * 0.14 + 64, 12, '#a3957a', 'center', 'italic');
   if (S.lost) txt(`Almas perdidas na Fase ${S.lost.stage}: ${S.lost.amount}`, fx, H * 0.88, 13, '#9fe7c9', 'center');
   const px = W * 0.5, pw = Math.min(W * 0.46, 420); let y = H * 0.1;
   ctx.fillStyle = 'rgba(20,16,18,0.7)'; ctx.fillRect(px - 10, y - 10, pw + 20, H * 0.82);

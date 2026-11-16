@@ -7,9 +7,21 @@ Soulslike 2D (visão de cima) para Android, com **fases infinitas** e **chefes v
 ## O jogo
 - Combate soulslike: ataque leve (combo de 3), ataque forte, rolamento com invencibilidade, estamina, frascos de cura, trava de mira.
 - Ataques inimigos são telegrafados por áreas vermelhas que se enchem — role através deles ou saia da área.
-- Fases geradas proceduralmente e infinitas, com 8 biomas que se alternam. A dificuldade escala a cada fase.
-- Um chefe a cada 3 fases. 9 arquétipos (Cavaleiro, Bruxa, Fera, Necromante, Colosso, Serpe, Olho, Duelista, Rainha-Aranha), com 18 ataques diferentes, segunda fase com 50% de vida e quebra de postura.
-- Depois do primeiro ciclo, os chefes ganham nomes, cores, ataques extras e modificadores aleatórios (Colossal, Veloz, Ardente, Sombrio, Gêmeos).
+- **8 reinos mitológicos** em ciclo infinito, cada um com cenário, obstáculos, inimigos e chefes próprios:
+
+| Reino | Inimigos | Chefes |
+|---|---|---|
+| Grego — Labirinto de Creta | Hoplita Esqueleto, Harpia, Sátiro, Guardião de Bronze, Lâmia, Ciclope | Minotauro, Medusa, Hidra de Lerna, Cérbero |
+| Nórdico — Helheim | Draugr, Lobo Warg, Einherjar Caído, Völva, Jötunn de Gelo | Fenrir, Surtr, Jörmungandr |
+| Egípcio — Duat | Múmia, Chacal, Guarda da Tumba, Sacerdote Amaldiçoado, Escorpião Gigante | Apep, Ammit, Esfinge |
+| Japonês — Yomi | Gaki, Kitsune, Tengu, Samurai Amaldiçoado, Onmyōji, Oni | Yamata no Orochi, Gashadokuro, Kyūbi no Kitsune |
+| Asteca — Mictlān | Guerreiro Jaguar, Ahuizotl, Guerreiro Águia, Tzitzimitl, Guardião de Obsidiana | Cipactli, Rainha Tzitzimitl, Guardião do Mictlān |
+| Folclore Brasileiro — Mata Encantada | Corpo-Seco, Mula sem Cabeça, Saci, Capelobo, Lobisomem | Boitatá, Mapinguari, Cuca, Curupira |
+| Inferno (demonologia) | Condenado, Diabrete, Cavaleiro Infernal, Demônio de Fogo | Anjo Caído, Leviatã, Beemote |
+| Eslavo — Floresta de Nav | Upyr, Volkolak, Bogatyr Caído, Rusalka, Leshy | Koschei, Baba Yaga, Zmei Gorynych |
+
+- Cada reino tem 3 fases; a terceira é o covil do chefe. A cada volta completa, o reino traz um chefe diferente, e depois que todos aparecem eles retornam com títulos (Ancestral, Renascido…), cores, ataques extras e modificadores (Colossal, Veloz, Ardente, Sombrio, Gêmeos).
+- Chefes entram em fúria com 50% de vida; quebre a postura deles para causar dano crítico.
 - Almas: gaste na fogueira em Vigor, Fôlego e Força. Ao morrer, você as perde, mas pode recuperá-las no local da morte.
 - O progresso é salvo automaticamente.
 
