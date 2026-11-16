@@ -11,7 +11,7 @@ cp web/index.html web/game.js "$OUT/assets/"
 "$BT/aapt2" compile --dir "$OUT/res" -o "$OUT/res.zip"
 "$BT/aapt2" link -o "$OUT/base.apk" -I "$JAR" --manifest android/AndroidManifest.xml \
   -A "$OUT/assets" --java "$OUT/gen" --min-sdk-version 24 --target-sdk-version 34 \
-  --version-code 3 --version-name 3.0 "$OUT/res.zip"
+  --version-code 4 --version-name 4.0 "$OUT/res.zip"
 javac -nowarn -source 11 -target 11 -Xlint:-options -classpath "$JAR" -d "$OUT/classes" \
   $(find android/src "$OUT/gen" -name '*.java')
 "$BT/d8" --release --min-api 24 --lib "$JAR" --output "$OUT/dex" $(find "$OUT/classes" -name '*.class')

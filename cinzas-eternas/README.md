@@ -5,11 +5,15 @@ Soulslike 2D (visão de cima) para Android, com **fases infinitas** e **chefes v
 **Baixar:** [`CinzasEternas.apk`](CinzasEternas.apk) — instale no Android 7.0+ (permita "fontes desconhecidas").
 
 ## O jogo
-- Combate soulslike: ataque leve (combo de 3), ataque forte, rolamento com invencibilidade, estamina, frascos de cura, trava de mira.
-- **Aparar estilo Sekiro**: toque DEFESA no instante do golpe para aparar (sem dano, faísca dourada) ou segure para bloquear (dano mínimo, mas enche sua postura). Apertar sem parar encurta a janela de aparo.
-- **Postura**: aparar e golpear enchem a postura do inimigo (barra amarela). Quando ela quebra, aparece um ponto vermelho: o próximo ataque é um **golpe fatal** (mata inimigos comuns; tira 30% da vida de chefes). Se a sua postura encher de tanto bloquear, você fica atordoado.
-- Telegrafias **douradas** podem ser aparadas (golpes, investidas, projéteis); **vermelhas** com o símbolo 危 não (impactos no chão, varreduras, fogo, raios) — role para fora.
-- Ataques inimigos são telegrafados por áreas vermelhas que se enchem — role através deles ou saia da área.
+- **7 classes iniciais** (Guerreiro, Cavaleiro, Bárbaro, Ladino, Samurai, Caçador, Feiticeiro) e **5 atributos**: Vigor, Fôlego, Força, Destreza e Intelecto.
+- **9 tipos de arma, cada um com golpes próprios**: espada, adaga (investida e ataque pelas costas), espadão, machado (giro 360°), lança (estocadas longas), maça (impacto em área), katana (corte iaijutsu), arco (3 flechas perfurantes) e cajado (flecha de alma teleguiada e orbe explosivo, gastando mana).
+- **50+ armas**, com escala por atributo (S/A/B/C/D/E), requisitos e reforço até +10 no ferreiro com Titanita. Cada um dos 25 chefes deixa uma **arma lendária única** (Kusanagi, Espada de Surtr, Presa de Fenrir, Facão do Curupira…).
+- **Elementos**: fogo (queimadura), gelo (congela), raio (choque e postura), veneno e sangue (hemorragia).
+- **Escudos** (absorção, estabilidade, bônus de aparo), **armaduras** (defesa, postura, bônus) e **13 anéis**. A **carga de equipamento** muda o rolamento: leve, médio, pesado ou sobrecarregado.
+- **Itens**: bombas, facas, resinas elementais, erva verde, cristal de mana, almas consumíveis e osso do retorno, usados por um atalho rápido.
+- **Loot**: brilhos dourados nas fases e itens deixados pelos inimigos, com equipamento temático de cada mitologia.
+- **Fogueira**: subir de nível, inventário completo, ferreiro e mercadora, cujo estoque cresce a cada chefe derrotado.
+- **Aparar estilo Sekiro**: toque DEFESA no instante do golpe para aparar ou segure para bloquear. Telegrafias douradas podem ser aparadas; vermelhas com 危 não. Quebrar a postura abre o **golpe fatal**.
 - **8 reinos mitológicos** em ciclo infinito, cada um com cenário, obstáculos, inimigos e chefes próprios:
 
 | Reino | Inimigos | Chefes |
@@ -28,7 +32,7 @@ Soulslike 2D (visão de cima) para Android, com **fases infinitas** e **chefes v
 - Almas: gaste na fogueira em Vigor, Fôlego e Força. Ao morrer, você as perde, mas pode recuperá-las no local da morte.
 - O progresso é salvo automaticamente.
 
-Controles no PC (testar no navegador abrindo `web/index.html`): WASD mover, J ataque, K forte, I ou C defesa/aparar, Espaço rolar, E curar, Q mira, Esc pausa.
+Controles no PC (testar no navegador abrindo `web/index.html`): WASD mover, J ataque, K forte, I defesa/aparar, R usar item, F trocar item, B inventário, Espaço rolar, E curar, Q mira, Esc pausa.
 
 ## Compilar
 ```
